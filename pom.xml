@@ -31,11 +31,8 @@
 
 	</dependencies>
 
-
-
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -49,7 +46,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>${checkstyle-maven-plugin.version}</version>
+				<configuration>
+					<configLocation>${resourceDir}/checkstyle.xml</configLocation>
+					<suppressionsLocation>${resourceDir}/checkstyle-suppressions.xml</suppressionsLocation>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -62,6 +63,12 @@
 		</plugins>
 	</build>
 
+	<properties>
+		<resourceDir>src/main/resources</resourceDir>
+		<checkstyle-maven-plugin.version>3.0.0</checkstyle-maven-plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 
 
 
