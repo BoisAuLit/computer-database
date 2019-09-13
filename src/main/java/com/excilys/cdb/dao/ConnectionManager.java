@@ -19,6 +19,9 @@ public class ConnectionManager {
         + "&useLegacyDatetimeCode=false&serverTimezone=UTC", USERNAME, PASSWORD);
   }
 
+  /**
+   * Inner class that let us get an instance of <code>ConnectionManager</code> lazily.
+   */
   private static class LazyHolder {
     static ConnectionManager INSTANCE = null;
     static {
@@ -35,10 +38,19 @@ public class ConnectionManager {
     return LazyHolder.INSTANCE;
   }
 
+  /**
+   * Get a <code>PreparedStatement</code> instance
+   *
+   * @param query The SQL query for which we want to get a <code>PreparedStatement</code> instance
+   * @return a <code>PreparedStatement</code> instace
+   */
   public PreparedStatement getPreparedStatement(String query) throws SQLException {
     return connection.prepareStatement(query);
   }
 
+  /**
+   * Close the connection to the database.
+   */
   public void close() throws SQLException {
     connection.close();
   }

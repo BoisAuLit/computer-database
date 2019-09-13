@@ -14,7 +14,6 @@ public class ComputerDao extends Dao<Computer> {
   // @formatter:off
     private static final String GET_QUERY =
         "SELECT * FROM computer WHERE id=?";
-
     private static final String GET_ALL_QUERY = "SELECT "
             + "c1.id as computer_id, "
             + "c1.name as computer_name, "
@@ -25,22 +24,25 @@ public class ComputerDao extends Dao<Computer> {
             + "FROM computer c1 "
             + "LEFT JOIN company c2 "
             + "ON c1.company_id=c2.id";
-
     private static final String SAVE_QUERY = "INSERT INTO "
             + "computer(id, name, introduced, discontinued, company_id) "
             + "VALUES(?, ?, ?, ?, ?)";
-
     private static final String UPDATE_QUERY =
         "UPDATE computer SET "
         + "name=?, "
         + "introduced=?, "
         + "discontinued=?, "
         + "company_id=? WHERE id=?";
-
     private static final String DELETE_QUERY =
         "DELETE FROM computer WHERE id=?";
     // @formatter:on
 
+  /**
+   * Get a <code>ComputerDao</code> instance.
+   *
+   * @param cm The <code>ConnectionManager</code> object needed to build the
+   *        instance<code>ComputerDao</code>.
+   */
   public ComputerDao(ConnectionManager cm) {
     super(cm);
   }

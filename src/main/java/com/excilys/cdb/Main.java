@@ -15,6 +15,9 @@ public final class Main {
 
   // static Logger logger = LoggerFactory.getLogger(Main.class);
 
+  /**
+   * Test all the dao methods.
+   */
   @SuppressWarnings("unused")
   private static void testDAO() throws SQLException {
     ConnectionManager cm = ConnectionManager.getInstance();
@@ -65,6 +68,11 @@ public final class Main {
     cm.close();
   }
 
+  /**
+   * Entry point of the program.
+   *
+   * @param args command line arguments.
+   */
   public static void main(final String[] args) {
     Logger logger = LoggerFactory.getLogger("com.excilys.cdb.Main");
     logger.debug("Hello world.");

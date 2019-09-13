@@ -9,7 +9,12 @@ public final class Computer {
   private Timestamp discontinued;
   private Company company;
 
-  public Computer() {}
+  /**
+   * Create a <code>Computer</code> instance
+   */
+  public Computer() {
+
+  }
 
   public Computer(long id, String name, Timestamp introduced, Timestamp discontinued,
       Company company) {
