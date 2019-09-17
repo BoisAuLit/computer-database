@@ -1,5 +1,7 @@
 package com.excilys.cdb.domain;
 
+import java.util.Objects;
+
 public final class Company {
   private long id;
   private String name;
@@ -37,10 +39,7 @@ public final class Company {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (int) (id ^ (id >>> 32));
-    return result;
+    return Objects.hash(id);
   }
 
   @Override
@@ -48,17 +47,11 @@ public final class Company {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof Company)) {
       return false;
     }
     Company other = (Company) obj;
-    if (id != other.id) {
-      return false;
-    }
-    return true;
+    return id == other.id;
   }
 
 }

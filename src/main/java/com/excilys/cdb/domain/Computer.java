@@ -1,6 +1,7 @@
 package com.excilys.cdb.domain;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public final class Computer {
   private long id;
@@ -9,9 +10,6 @@ public final class Computer {
   private Timestamp discontinued;
   private Company company;
 
-  /**
-   * Create a <code>Computer</code> instance
-   */
   public Computer() {
 
   }
@@ -74,30 +72,18 @@ public final class Computer {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (int) (id ^ (id >>> 32));
-    return result;
+    return Objects.hash(id);
   }
 
   @Override
-  public boolean equals(final Object obj) {
+  public boolean equals(Object obj) {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
+    if (!(obj instanceof Computer)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-
     Computer other = (Computer) obj;
-    if (id != other.id) {
-      return false;
-    }
-
-    return true;
+    return id == other.id;
   }
-
 }

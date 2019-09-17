@@ -2,56 +2,58 @@ package com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.text.StringSubstitutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConnectionManager {
 
-  private static final String USERNAME = "admincdb";
-  private static final String PASSWORD = "qwerty1234";
-  private static Connection connection;
-
-  private ConnectionManager()
-      throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-    Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-        + "computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true"
-        + "&useLegacyDatetimeCode=false&serverTimezone=UTC", USERNAME, PASSWORD);
-  }
+  static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ConnectionManager");
 
   /**
-   * Inner class that let us get an instance of <code>ConnectionManager</code> lazily.
+   * Property keys in the properties file
    */
-  private static class LazyHolder {
-    static ConnectionManager INSTANCE = null;
-    static {
-      try {
-        INSTANCE = new ConnectionManager();
-      } catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-          | SQLException e) {
-        e.printStackTrace();
-      }
+  private static final String USERNAME_KEY = "username";
+  private static final String PASSWORD_KEY = "password";
+  private static final String DATABASE_TYPE_KEY = "dbType";
+  private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
+
+  // @formatter:off
+  private static final String CONNECTION_QUERY_TEMPLATE = String.format("jdbc:${%s}://localhost:3306/"
+      + "computer-database-db?"
+      + "useUnicode=true"
+      + "&useJDBCCompliantTimezoneShift=true"
+      + "&useLegacyDatetimeCode=false"
+      + "&serverTimezone=UTC", DATABASE_TYPE_KEY);
+  // @formatter:on
+
+  private static Connection connection;
+  static {
+    try {
+      Class.forName(DRIVER_NAME).newInstance();
+    } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+      logger.error("Error loading JDBC driver!", e);
+      System.exit(1);
     }
   }
 
-  public static ConnectionManager getInstance() {
-    return LazyHolder.INSTANCE;
-  }
+  static Connection getConnection() throws SQLException {
 
-  /**
-   * Get a <code>PreparedStatement</code> instance
-   *
-   * @param query The SQL query for which we want to get a <code>PreparedStatement</code> instance
-   * @return a <code>PreparedStatement</code> instace
-   */
-  public PreparedStatement getPreparedStatement(String query) throws SQLException {
-    return connection.prepareStatement(query);
-  }
+    Configuration configuration = ConfigurationUtils.getConfiguration();
 
-  /**
-   * Close the connection to the database.
-   */
-  public void close() throws SQLException {
-    connection.close();
+    Map<String, String> valuesMap = new HashMap<>();
+    valuesMap.put(DATABASE_TYPE_KEY, configuration.getString(DATABASE_TYPE_KEY));
+
+    StringSubstitutor ss = new StringSubstitutor(valuesMap);
+    String connectionQuery = ss.replace(CONNECTION_QUERY_TEMPLATE);
+
+    String username = configuration.getString(USERNAME_KEY);
+    String password = configuration.getString(PASSWORD_KEY);
+    connection = DriverManager.getConnection(connectionQuery, username, password);
+    return connection;
   }
 }

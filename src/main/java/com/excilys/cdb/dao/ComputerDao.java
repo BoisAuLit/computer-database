@@ -12,29 +12,32 @@ import com.excilys.cdb.domain.Computer;
 public class ComputerDao extends Dao<Computer> {
 
   // @formatter:off
-    private static final String GET_QUERY =
-        "SELECT * FROM computer WHERE id=?";
-    private static final String GET_ALL_QUERY = "SELECT "
-            + "c1.id as computer_id, "
-            + "c1.name as computer_name, "
-            + "introduced, "
-            + "discontinued, "
-            + "company_id, "
-            + "c2.name as company_name "
-            + "FROM computer c1 "
-            + "LEFT JOIN company c2 "
-            + "ON c1.company_id=c2.id";
-    private static final String SAVE_QUERY = "INSERT INTO "
-            + "computer(id, name, introduced, discontinued, company_id) "
-            + "VALUES(?, ?, ?, ?, ?)";
-    private static final String UPDATE_QUERY =
-        "UPDATE computer SET "
-        + "name=?, "
-        + "introduced=?, "
-        + "discontinued=?, "
-        + "company_id=? WHERE id=?";
-    private static final String DELETE_QUERY =
-        "DELETE FROM computer WHERE id=?";
+  private static final String GET_QUERY =
+      "SELECT * FROM computer WHERE id=?";
+
+  private static final String GET_ALL_QUERY = "SELECT "
+          + "c1.id as computer_id, "
+          + "c1.name as computer_name, "
+          + "introduced, "
+          + "discontinued, "
+          + "company_id, "
+          + "c2.name as company_name "
+          + "FROM computer c1 "
+          + "LEFT JOIN company c2 "
+          + "ON c1.company_id=c2.id";
+
+  private static final String SAVE_QUERY = "INSERT INTO "
+          + "computer(id, name, introduced, discontinued, company_id) "
+          + "VALUES(?, ?, ?, ?, ?)";
+
+  private static final String UPDATE_QUERY =
+      "UPDATE computer SET "
+      + "name=?, "
+      + "introduced=?, "
+      + "discontinued=?, "
+      + "company_id=? WHERE id=?";
+  private static final String DELETE_QUERY =
+      "DELETE FROM computer WHERE id=?";
     // @formatter:on
 
   /**

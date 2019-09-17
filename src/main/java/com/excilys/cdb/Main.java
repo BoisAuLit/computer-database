@@ -1,11 +1,8 @@
 package com.excilys.cdb;
 
 import java.sql.SQLException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ConnectionManager;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.util.StatusPrinter;
 
 public final class Main {
 
@@ -24,7 +21,7 @@ public final class Main {
 
     /////////////////////////////////////////////////////
     // Test CompanyDao.getAll -> tested works
-    // new CompanyDao(cm).getAll().stream().forEach(System.out::println);
+    new CompanyDao(cm).getAll().stream().forEach(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test CompanyDao.get -> tested, works
@@ -68,18 +65,23 @@ public final class Main {
     cm.close();
   }
 
+  @SuppressWarnings("unused")
+  private static void testLogger() {
+    // Logger logger = LoggerFactory.getLogger("com.excilys.cdb.Main");
+    // logger.debug("Hello world.");
+    //
+    // // print internal state
+    // LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+    // StatusPrinter.print(lc);
+  }
+
   /**
    * Entry point of the program.
    *
    * @param args command line arguments.
+   * @throws SQLException
    */
-  public static void main(final String[] args) {
-    Logger logger = LoggerFactory.getLogger("com.excilys.cdb.Main");
-    logger.debug("Hello world.");
-
-    // print internal state
-    LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-    StatusPrinter.print(lc);
-
+  public static void main(final String[] args) throws SQLException {
+    testDAO();
   }
 }
