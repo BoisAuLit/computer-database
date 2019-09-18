@@ -75,7 +75,7 @@ public final class Main {
     // StatusPrinter.print(lc);
   }
 
-  public static void main(final String[] args) throws SQLException {
-    testDAO();
+  public static void main(final String[] args) throws SQLException, ClassNotFoundException {
+    // testDAO();
   }
 }
