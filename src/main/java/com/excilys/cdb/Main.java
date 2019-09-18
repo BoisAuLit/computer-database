@@ -2,6 +2,9 @@ package com.excilys.cdb;
 
 import java.sql.SQLException;
 import com.excilys.cdb.dao.CompanyDao;
+import com.excilys.cdb.dao.ComputerDao;
+import com.excilys.cdb.domain.Company;
+import com.excilys.cdb.domain.Computer;
 
 public final class Main {
 
@@ -12,23 +15,27 @@ public final class Main {
   @SuppressWarnings("unused")
   private static void testDAO() throws SQLException {
 
+    CompanyDao companyDao = CompanyDao.getInstance();
+    ComputerDao computerDao = ComputerDao.getInstance();
+    Company c1 = new Company();
+    Computer c2 = new Computer();
+
     /////////////////////////////////////////////////////
     // Test CompanyDao.getAll -> tested works
-    new CompanyDao().getAll().stream().forEach(System.out::println);
+    // companyDao.getAll().stream().forEach(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test CompanyDao.get -> tested, works
-    // Optional<Company> com = new CompanyDao().get(1);
+    // Optional<Company> com = companyDao.get(1);
     // com.ifPresent(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test ComputerDao.getAll -> tested, works
-    // new ComputerDao(cm).getAll().stream().forEach(System.out::println);
+    ComputerDao.getInstance().getAll().stream().forEach(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test ComputerDao.get -> tested, works
-    // Computer com = new ComputerDao(cm).get(1);
-    // System.out.println(com);
+    // new ComputerDao().get(1).ifPresent(System.out::println);
 
     ///////////////////////////////////////////////////////
     // Test ComputerDao.save -> tested, works

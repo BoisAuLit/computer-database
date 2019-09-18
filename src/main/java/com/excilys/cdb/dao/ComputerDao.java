@@ -17,45 +17,72 @@ public class ComputerDao implements Dao<Computer> {
 
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
 
-  // @formatter:off
+//@formatter:off
   private static final String GET_QUERY =
-      "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id=?";
+      "SELECT id, name, introduced, discontinued, company_id "
+      + "FROM computer WHERE id=?";
 
   private static final String GET_ALL_QUERY = "SELECT "
-          + "c1.id as computer_id, "
-          + "c1.name as computer_name, "
-          + "introduced, "
-          + "discontinued, "
-          + "company_id, "
-          + "c2.name as company_name "
-          + "FROM computer c1 "
-          + "LEFT JOIN company c2 "
-          + "ON c1.company_id=c2.id";
+      + "c1.id as id, "
+      + "c1.name as name, "
+      + "introduced, "
+      + "discontinued, "
+      + "company_id, "
+      + "c2.name as company_name "
+      + "FROM computer c1 "
+      + "LEFT JOIN company c2 "
+      + "ON c1.company_id=c2.id";
 
-  private static final String SAVE_QUERY = "INSERT INTO "
-          + "computer(id, name, introduced, discontinued, company_id) "
-          + "VALUES(?, ?, ?, ?, ?)";
+  private static final String SAVE_QUERY =
+      "INSERT INTO "
+      + "computer(id, name, introduced, discontinued, company_id) "
+      + "VALUES(?, ?, ?, ?, ?)";
 
   private static final String UPDATE_QUERY =
-      "UPDATE computer SET "
-      + "name=?, "
-      + "introduced=?, "
-      + "discontinued=?, "
-      + "company_id=? WHERE id=?";
-  private static final String DELETE_QUERY =
-      "DELETE FROM computer WHERE id=?";
-    // @formatter:on
+      "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 
+  private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
+//@formatter:on
+
+  // Error messages
+  private static final String ERROR_MESSAGE_PREFIX = "Error happpend when ";
+  private static final String GET_ERROR = ERROR_MESSAGE_PREFIX + "getting computer by id";
+  private static final String GET_ALL_ERROR = ERROR_MESSAGE_PREFIX + "getting all computers";
+  private static final String SAVE_ERROR = ERROR_MESSAGE_PREFIX + "creating a record of computer";
+
+  private static final String COMPNAY_ID_NOT_VALID_ERROR =
+      "When you insert a company record, please make sure that the computer id is valid!";
+  private static final String UPDATE_ERROR =
+      ERROR_MESSAGE_PREFIX + "updating a record of computer!";
+  private static final String DELETE_ERROR =
+      ERROR_MESSAGE_PREFIX + "deleting a record of computer!";
+
+  private static final CompanyDao COMPANY_DAO = CompanyDao.getInstance();
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
+  private static final ComputerHandler COMPUTER_HANDLER = ComputerHandler.getInstance();
+  private static final ComputerListHandler COMPUTER_LIST_HANDLER =
+      ComputerListHandler.getInstnace();
+
+  private ComputerDao() {
+
+  }
+
+  private static class LazyHolder {
+    private static final ComputerDao INSTANCE = new ComputerDao();
+
+  }
+
+  public static ComputerDao getInstance() {
+    return LazyHolder.INSTANCE;
+  }
 
   @Override
   public Optional<Computer> get(long id) {
     try (Connection connection = ConnectionManager.getConnection()) {
-      ComputerHandler computerHandler = new ComputerHandler(connection);
-      Computer computer = QUERY_RUNNER.query(connection, GET_QUERY, computerHandler, id);
+      Computer computer = QUERY_RUNNER.query(connection, GET_QUERY, COMPUTER_HANDLER, id);
       return Optional.ofNullable(computer);
     } catch (SQLException e) {
-      logger.error("Error happening when getting company by id", e);
+      logger.error(GET_ERROR, e);
     }
     return Optional.empty();
   }
@@ -63,11 +90,12 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public List<Computer> getAll() {
     List<Computer> computers = new ArrayList<>();
+
     try (Connection connection = ConnectionManager.getConnection()) {
-      ComputerListHandler computerListHandler = new ComputerListHandler(connection);
-      computers = QUERY_RUNNER.query(connection, GET_ALL_QUERY, computerListHandler);
+      // computers = QUERY_RUNNER.query(connection, GET_ALL_QUERY, COMPUTER_LIST_HANDLER);
+      computers = QUERY_RUNNER.query(connection, GET_ALL_QUERY, COMPUTER_LIST_HANDLER);
     } catch (SQLException e) {
-      logger.error("Error happening when getting all companies", e);
+      logger.error(GET_ALL_ERROR, e);
     }
     return computers;
   }
@@ -80,10 +108,9 @@ public class ComputerDao implements Dao<Computer> {
       if (c.getCompany().isPresent()) {
         companyId = c.getCompany().get().getId();
 
-        Optional<Company> company = new CompanyDao().get(companyId);
+        Optional<Company> company = COMPANY_DAO.get(companyId);
 
-        company.orElseThrow(() -> new SQLException(
-            "When you insert a company record, please make sure that the company id is valid!"));
+        company.orElseThrow(() -> new SQLException(COMPNAY_ID_NOT_VALID_ERROR));
 
         rowsAffected = QUERY_RUNNER.update(connection, SAVE_QUERY, null, c.getName(),
             c.getIntroduced(), c.getDiscontinued(), companyId);
@@ -94,7 +121,7 @@ public class ComputerDao implements Dao<Computer> {
 
       return rowsAffected;
     } catch (SQLException e) {
-      logger.error("Error happening when inserting a new record of computer into the database!", e);
+      logger.error(SAVE_ERROR, e);
     }
     return 0;
   }
@@ -106,8 +133,7 @@ public class ComputerDao implements Dao<Computer> {
           c.getIntroduced(), c.getDiscontinued(), c.getCompany(), c.getId());
       return rowsAffected;
     } catch (SQLException e) {
-      logger.error("Error happening when inserting update a record of computer in the database!",
-          e);
+      logger.error(UPDATE_ERROR, e);
     }
     return 0;
   }
@@ -118,7 +144,7 @@ public class ComputerDao implements Dao<Computer> {
       int rowsAffected = QUERY_RUNNER.update(connection, DELETE_QUERY, c.getId());
       return rowsAffected;
     } catch (SQLException e) {
-      logger.error("Error happenin when deleting a record of computer in the database!", e);
+      logger.error(DELETE_ERROR, e);
     }
 
     return 0;

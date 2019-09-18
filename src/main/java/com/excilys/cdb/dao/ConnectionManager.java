@@ -24,7 +24,8 @@ public class ConnectionManager {
   private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
 
   // @formatter:off
-  private static final String CONNECTION_QUERY_TEMPLATE = String.format("jdbc:${%s}://localhost:3306/"
+  private static final String CONNECTION_QUERY_TEMPLATE =
+      String.format("jdbc:${%s}://localhost:3306/"
       + "computer-database-db?"
       + "useUnicode=true"
       + "&useJDBCCompliantTimezoneShift=true"

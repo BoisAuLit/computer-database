@@ -23,16 +23,32 @@ public class CompanyDao implements Dao<Company> {
       new BeanListHandler<>(Company.class);
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
+  // Error messages
+  private static final String ERROR_MESSAGE_PREFIX = "Error happpend when ";
+  private static final String GET_ERROR = ERROR_MESSAGE_PREFIX + "getting compnay by id";
+  private static final String GET_ALL_ERROR = ERROR_MESSAGE_PREFIX + "getting all companies";
+
+  private CompanyDao() {
+
+  }
+
+  private static class LazyHolder {
+    private static final CompanyDao INSTNACE = new CompanyDao();
+  }
+
+  public static CompanyDao getInstance() {
+    return LazyHolder.INSTNACE;
+  }
+
   @Override
   public Optional<Company> get(long id) {
     try (Connection connection = ConnectionManager.getConnection();) {
       Company company = QUERY_RUNNER.query(connection, GET_QUERY, COMPANY_HANDLER, id);
       return Optional.ofNullable(company);
     } catch (SQLException e) {
-      logger.error("Error happening when getting company by id", e);
+      logger.error(GET_ERROR, e);
     }
     return Optional.<Company>empty();
-
   }
 
   @Override
@@ -42,7 +58,7 @@ public class CompanyDao implements Dao<Company> {
       companies = QUERY_RUNNER.query(connection, GET_ALL_QUERY, COMPANY_LIST_HANDLER);
       return companies;
     } catch (SQLException e) {
-      logger.error("Error happening when getting all companies", e);
+      logger.error(GET_ALL_ERROR, e);
     }
     return companies;
   }
