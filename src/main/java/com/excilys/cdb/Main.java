@@ -2,7 +2,6 @@ package com.excilys.cdb;
 
 import java.sql.SQLException;
 import com.excilys.cdb.dao.CompanyDao;
-import com.excilys.cdb.dao.ConnectionManager;
 
 public final class Main {
 
@@ -10,23 +9,17 @@ public final class Main {
 
   }
 
-  // static Logger logger = LoggerFactory.getLogger(Main.class);
-
-  /**
-   * Test all the dao methods.
-   */
   @SuppressWarnings("unused")
   private static void testDAO() throws SQLException {
-    ConnectionManager cm = ConnectionManager.getInstance();
 
     /////////////////////////////////////////////////////
     // Test CompanyDao.getAll -> tested works
-    new CompanyDao(cm).getAll().stream().forEach(System.out::println);
+    new CompanyDao().getAll().stream().forEach(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test CompanyDao.get -> tested, works
-    // Company com = new CompanyDao(cm).get(1);
-    // System.out.println(com);
+    // Optional<Company> com = new CompanyDao().get(1);
+    // com.ifPresent(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test ComputerDao.getAll -> tested, works
@@ -62,7 +55,7 @@ public final class Main {
     // int rowsAffected = new ComputerDao(cm).delete(c);
     // System.out.println(rowsAffected);
 
-    cm.close();
+    // cm.close();
   }
 
   @SuppressWarnings("unused")
@@ -75,12 +68,6 @@ public final class Main {
     // StatusPrinter.print(lc);
   }
 
-  /**
-   * Entry point of the program.
-   *
-   * @param args command line arguments.
-   * @throws SQLException
-   */
   public static void main(final String[] args) throws SQLException {
     testDAO();
   }

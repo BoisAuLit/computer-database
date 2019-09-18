@@ -1,4 +1,4 @@
-package com.excilys.cdb.dao;
+package com.excilys.cdb.utils;
 
 import java.io.File;
 import org.apache.commons.configuration2.Configuration;

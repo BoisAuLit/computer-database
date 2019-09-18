@@ -2,27 +2,14 @@ package com.excilys.cdb.domain;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class Computer {
   private long id;
   private String name;
   private Timestamp introduced;
   private Timestamp discontinued;
-  private Company company;
-
-  public Computer() {
-
-  }
-
-  public Computer(long id, String name, Timestamp introduced, Timestamp discontinued,
-      Company company) {
-    super();
-    this.id = id;
-    this.name = name;
-    this.introduced = introduced;
-    this.discontinued = discontinued;
-    this.company = company;
-  }
+  private Optional<Company> company;
 
   public long getId() {
     return id;
@@ -56,11 +43,11 @@ public final class Computer {
     this.discontinued = discontinued;
   }
 
-  public Company getCompany() {
+  public Optional<Company> getCompany() {
     return company;
   }
 
-  public void setCompany(Company company) {
+  public void setCompany(Optional<Company> company) {
     this.company = company;
   }
 

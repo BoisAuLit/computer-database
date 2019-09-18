@@ -1,19 +1,25 @@
 package com.excilys.cdb.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import org.apache.commons.dbutils.QueryRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.excilys.cdb.dao.mappers.ComputerHandler;
+import com.excilys.cdb.dao.mappers.ComputerListHandler;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 
-public class ComputerDao extends Dao<Computer> {
+public class ComputerDao implements Dao<Computer> {
+
+  private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
 
   // @formatter:off
   private static final String GET_QUERY =
-      "SELECT * FROM computer WHERE id=?";
+      "SELECT id,name,introduced,discontinued,company_id FROM computer WHERE id=?";
 
   private static final String GET_ALL_QUERY = "SELECT "
           + "c1.id as computer_id, "
@@ -40,156 +46,81 @@ public class ComputerDao extends Dao<Computer> {
       "DELETE FROM computer WHERE id=?";
     // @formatter:on
 
-  /**
-   * Get a <code>ComputerDao</code> instance.
-   *
-   * @param cm The <code>ConnectionManager</code> object needed to build the
-   *        instance<code>ComputerDao</code>.
-   */
-  public ComputerDao(ConnectionManager cm) {
-    super(cm);
-  }
+  private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
   @Override
-  public Computer get(long id) {
-    Computer com = new Computer();
-    try {
-      PreparedStatement ps = cm.getPreparedStatement(GET_QUERY);
-      ps.setLong(1, id);
-      ResultSet rs = ps.executeQuery();
-      if (rs.first()) {
-        String computerName = rs.getString("name");
-        com.setId(id);
-        com.setName(computerName);
-      }
-      return com;
+  public Optional<Computer> get(long id) {
+    try (Connection connection = ConnectionManager.getConnection()) {
+      ComputerHandler computerHandler = new ComputerHandler(connection);
+      Computer computer = QUERY_RUNNER.query(connection, GET_QUERY, computerHandler, id);
+      return Optional.ofNullable(computer);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("Error happening when getting company by id", e);
     }
-    return null;
+    return Optional.empty();
   }
 
   @Override
   public List<Computer> getAll() {
-    try {
-      PreparedStatement ps = cm.getPreparedStatement(GET_ALL_QUERY);
-      ResultSet rs = ps.executeQuery();
-
-      List<Computer> result = new ArrayList<>();
-
-      while (rs.next()) {
-        long id = rs.getLong("computer_id");
-        String name = rs.getString("computer_name");
-        Timestamp introduced = rs.getTimestamp("introduced");
-        Timestamp discontinued = rs.getTimestamp("discontinued");
-        long companyId = rs.getLong("company_id");
-        String companyName = rs.getString("company_name");
-
-        Company company = new Company(companyId, companyName);
-
-        Computer computer = new Computer(id, name, introduced, discontinued, company);
-        result.add(computer);
-      }
-
-      return result;
-
+    List<Computer> computers = new ArrayList<>();
+    try (Connection connection = ConnectionManager.getConnection()) {
+      ComputerListHandler computerListHandler = new ComputerListHandler(connection);
+      computers = QUERY_RUNNER.query(connection, GET_ALL_QUERY, computerListHandler);
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("Error happening when getting all companies", e);
     }
-
-    return null;
+    return computers;
   }
 
   @Override
   public int save(Computer c) {
-    try {
-      PreparedStatement ps = cm.getPreparedStatement(SAVE_QUERY);
+    try (Connection connection = ConnectionManager.getConnection()) {
+      long companyId;
+      int rowsAffected;
+      if (c.getCompany().isPresent()) {
+        companyId = c.getCompany().get().getId();
 
-      // Don't provide id, let mysql server automatically do this for us
-      ps.setNull(1, java.sql.Types.BIGINT);
+        Optional<Company> company = new CompanyDao().get(companyId);
 
-      if (c.getName() == null) {
-        throw new RuntimeException("Comupter name cannot be null !");
+        company.orElseThrow(() -> new SQLException(
+            "When you insert a company record, please make sure that the company id is valid!"));
+
+        rowsAffected = QUERY_RUNNER.update(connection, SAVE_QUERY, null, c.getName(),
+            c.getIntroduced(), c.getDiscontinued(), companyId);
       } else {
-        ps.setString(2, c.getName());
+        rowsAffected = QUERY_RUNNER.update(connection, SAVE_QUERY, null, c.getName(),
+            c.getIntroduced(), c.getDiscontinued(), null);
       }
 
-      if (c.getIntroduced() == null) {
-        ps.setNull(3, java.sql.Types.TIMESTAMP);
-      } else {
-        ps.setTimestamp(3, c.getIntroduced());
-      }
-
-      if (c.getDiscontinued() == null) {
-        ps.setNull(4, java.sql.Types.TIMESTAMP);
-      } else {
-        ps.setTimestamp(4, c.getDiscontinued());
-      }
-
-      if (c.getCompany() == null) {
-        ps.setNull(5, java.sql.Types.BIGINT);
-      } else {
-        ps.setLong(5, c.getCompany().getId());
-      }
-
-      return ps.executeUpdate();
+      return rowsAffected;
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("Error happening when inserting a new record of computer into the database!", e);
     }
     return 0;
   }
 
   @Override
   public int update(Computer c) {
-    try {
-      PreparedStatement ps = cm.getPreparedStatement(UPDATE_QUERY);
-
-      ps.setString(1, c.getName());
-
-      if (c.getName() == null) {
-        throw new RuntimeException("Comupter name cannot be null !");
-      } else {
-        ps.setString(1, c.getName());
-      }
-
-      if (c.getIntroduced() == null) {
-        ps.setNull(2, java.sql.Types.TIMESTAMP);
-      } else {
-        ps.setTimestamp(2, c.getIntroduced());
-      }
-
-      if (c.getDiscontinued() == null) {
-        ps.setNull(3, java.sql.Types.TIMESTAMP);
-      } else {
-        ps.setTimestamp(3, c.getDiscontinued());
-      }
-
-      if (c.getCompany() == null) {
-        ps.setNull(4, java.sql.Types.BIGINT);
-      } else {
-        ps.setLong(4, c.getCompany().getId());
-      }
-
-      ps.setLong(5, c.getId());
-
-      return ps.executeUpdate();
+    try (Connection conneciton = ConnectionManager.getConnection()) {
+      int rowsAffected = QUERY_RUNNER.update(conneciton, UPDATE_QUERY, c.getName(),
+          c.getIntroduced(), c.getDiscontinued(), c.getCompany(), c.getId());
+      return rowsAffected;
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("Error happening when inserting update a record of computer in the database!",
+          e);
     }
     return 0;
   }
 
   @Override
   public int delete(Computer c) {
-    try {
-      PreparedStatement ps = cm.getPreparedStatement(DELETE_QUERY);
-
-      ps.setLong(1, c.getId());
-
-      return ps.executeUpdate();
+    try (Connection connection = ConnectionManager.getConnection()) {
+      int rowsAffected = QUERY_RUNNER.update(connection, DELETE_QUERY, c.getId());
+      return rowsAffected;
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("Error happenin when deleting a record of computer in the database!", e);
     }
+
     return 0;
   }
 
