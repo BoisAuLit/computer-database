@@ -31,11 +31,11 @@ public final class Main {
 
     /////////////////////////////////////////////////////
     // Test ComputerDao.getAll -> tested, works
-    ComputerDao.getInstance().getAll().stream().forEach(System.out::println);
+    // ComputerDao.getInstance().getAll().stream().forEach(System.out::println);
 
     /////////////////////////////////////////////////////
     // Test ComputerDao.get -> tested, works
-    // new ComputerDao().get(1).ifPresent(System.out::println);
+    ComputerDao.getInstance().get(1).ifPresent(System.out::println);
 
     ///////////////////////////////////////////////////////
     // Test ComputerDao.save -> tested, works
@@ -76,6 +76,6 @@ public final class Main {
   }
 
   public static void main(final String[] args) throws SQLException, ClassNotFoundException {
-    // testDAO();
+    testDAO();
   }
 }

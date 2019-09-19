@@ -1,14 +1,14 @@
 package com.excilys.cdb.domain;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
 public final class Computer {
   private long id;
   private String name;
-  private Timestamp introduced;
-  private Timestamp discontinued;
+  private Optional<LocalDate> introduced;
+  private Optional<LocalDate> discontinued;
   private Optional<Company> company;
 
   public long getId() {
@@ -27,19 +27,19 @@ public final class Computer {
     this.name = name;
   }
 
-  public Timestamp getIntroduced() {
+  public Optional<LocalDate> getIntroduced() {
     return introduced;
   }
 
-  public void setIntroduced(Timestamp introduced) {
+  public void setIntroduced(Optional<LocalDate> introduced) {
     this.introduced = introduced;
   }
 
-  public Timestamp getDiscontinued() {
+  public Optional<LocalDate> getDiscontinued() {
     return discontinued;
   }
 
-  public void setDiscontinued(Timestamp discontinued) {
+  public void setDiscontinued(Optional<LocalDate> discontinued) {
     this.discontinued = discontinued;
   }
 
