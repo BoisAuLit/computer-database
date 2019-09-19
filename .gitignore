@@ -1,1 +1,6 @@
 /target/
+properties/
+.classpath
+.project
+.settings/
+.umlproject

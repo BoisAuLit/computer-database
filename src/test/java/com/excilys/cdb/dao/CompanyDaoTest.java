@@ -1,55 +1,62 @@
 package com.excilys.cdb.dao;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.junit.jupiter.api.AfterAll;
+import java.util.Optional;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.excilys.cdb.domain.Company;
 
 class CompanyDaoTest {
 
-  private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.CompanyDaoTest");
+  private static final String H2_DRIVER_NAME = "org.h2.Driver";
+  private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
+  private static final CompanyDao COOMPANY_DAO = CompanyDao.getInstance();
 
-  private static Connection connection;
-  static {
-    try {
-      Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:~/test");
-    } catch (ClassNotFoundException | SQLException e) {
-      logger.error("Error happpend when configuring h2 in-memory datbase");
-      e.printStackTrace();
-    }
-
-  }
+  // todo, to be removed
+  private static final String INIT_FILE_PATH =
+      "/home/excilys/Bureau/tuto/cdb/computer-database/src/test/resources/init.sql";
+  private static final String INSERT_FILE_PAHT =
+      "/home/excilys/Bureau/tuto/cdb/computer-database/src/test/resources/insert.sql";
 
   @BeforeAll
-  void beforeAll() throws ClassNotFoundException, SQLException {
-
+  public static void BeforeAll() throws ClassNotFoundException {
+    Class.forName(H2_DRIVER_NAME);
   }
 
+  // insert the database
   @BeforeEach
-  void beforeEach() {
-
+  public void beforeEach() throws SQLException, FileNotFoundException {
+    try (Connection connection = DriverManager.getConnection(H2_CONNECTION_QUERY)) {
+      ScriptRunner sr = new ScriptRunner(connection);
+      Reader initFileReader = new BufferedReader(new FileReader(INIT_FILE_PATH));
+      Reader insertFileReader = new BufferedReader(new FileReader(INSERT_FILE_PAHT));
+      sr.runScript(initFileReader);
+      sr.runScript(insertFileReader);
+    }
   }
 
+  // drop the database
   @AfterEach
-  void afterEach() {
-
-  }
-
-  @AfterAll
-  void afterAll() {
+  public void afterEach() {
 
   }
 
   @Test
-  void test() {
+  public void testGetSuccess() throws SQLException, ClassNotFoundException {
 
+    try (Connection connection = DriverManager.getConnection(H2_CONNECTION_QUERY)) {
+      Optional<Company> company = COOMPANY_DAO.get(1);
+      System.out.println(company.get());
+    }
   }
 
 }

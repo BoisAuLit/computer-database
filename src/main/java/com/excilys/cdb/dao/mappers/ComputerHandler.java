@@ -8,27 +8,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import com.excilys.cdb.dao.CompanyDao;
+import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 
-public class ComputerHandler {
+public final class ComputerHandler {
   private static final CompanyDao COMPANY_DAO = CompanyDao.getInstance();
-
-  private static final String ID_COLUMN_NAME = "id";
-  private static final String NAME_COLUMN_NAME = "name";
-  private static final String DATE_INTRODUCED_COLUMN_NAME = "introduced";
-  private static final String DATE_DISCONTINUED_COLUMN_NAME = "discontinued";
-  private static final String COMPANY_ID_COLUMN_NAME = "company_id";
 
   public static Computer convert(Map<String, Object> map) {
 
     Computer computer = new Computer();
 
-    Long idLong = (Long) map.get(ID_COLUMN_NAME);
-    String nameStr = (String) map.get(NAME_COLUMN_NAME);
-    Timestamp introduceTimestamp = (Timestamp) map.get(DATE_INTRODUCED_COLUMN_NAME);
-    Timestamp discontinuedTimestamp = (Timestamp) map.get(DATE_DISCONTINUED_COLUMN_NAME);
-    Long companyIdLong = (Long) map.get(COMPANY_ID_COLUMN_NAME);
+    Long idLong = (Long) map.get(ComputerDao.ID_COLUMN_NAME);
+    String nameStr = (String) map.get(ComputerDao.NAME_COLUMN_NAME);
+    Timestamp introduceTimestamp = (Timestamp) map.get(ComputerDao.DATE_INTRODUCED_COLUMN_NAME);
+    Timestamp discontinuedTimestamp =
+        (Timestamp) map.get(ComputerDao.DATE_DISCONTINUED_COLUMN_NAME);
+    Long companyIdLong = (Long) map.get(ComputerDao.COMPANY_ID_COLUMN_NAME);
 
     Optional<LocalDate> introduced = Optional.empty();
     Optional<LocalDate> discontinued = Optional.empty();

@@ -21,6 +21,12 @@ public class ComputerDao implements Dao<Computer> {
 
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
 
+  public static final String ID_COLUMN_NAME = "id";
+  public static final String NAME_COLUMN_NAME = "name";
+  public static final String DATE_INTRODUCED_COLUMN_NAME = "introduced";
+  public static final String DATE_DISCONTINUED_COLUMN_NAME = "discontinued";
+  public static final String COMPANY_ID_COLUMN_NAME = "company_id";
+
 //@formatter:off
   private static final String GET_QUERY =
       "SELECT id, name, introduced, discontinued, company_id "
