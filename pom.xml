@@ -32,9 +32,20 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.1.0</version>
+			<version>${junit-jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!--optional below -->
+		<!-- add any JUnit extension you need such as -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/org.jmockit/jmockit -->
 		<dependency>
 			<groupId>org.jmockit</groupId>
@@ -76,11 +87,6 @@
 			<artifactId>commons-dbutils</artifactId>
 			<version>1.6</version>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.196</version>
-		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 		<dependency>
@@ -102,14 +108,10 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
 			</plugin>
 
 			<plugin>
@@ -117,8 +119,8 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>${checkstyle-maven-plugin.version}</version>
 				<configuration>
-					<configLocation>${resourceDir}/checkstyle-excilys.xml</configLocation>
-					<suppressionsLocation>${resourceDir}/checkstyle-excilys-suppressions.xml</suppressionsLocation>
+					<configLocation>${resourceDir}/checkstyle.xml</configLocation>
+					<suppressionsLocation>${resourceDir}/suppressions.xml</suppressionsLocation>
 				</configuration>
 				<executions>
 					<execution>
@@ -139,6 +141,9 @@
 		<checkstyle-maven-plugin.version>3.0.0</checkstyle-maven-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<junit-jupiter.version>5.2.0</junit-jupiter.version>
 	</properties>
 
 

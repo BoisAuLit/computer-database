@@ -1,7 +1,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http:/java.sun.com/dtd/web-app_2_3.dtd">
-  <servlet>
+<!--   <servlet>
     <servlet-name>hello</servlet-name>
     <servlet-class>com.excilys.cdb.servlets.HelloServlet</servlet-class>
   </servlet>
@@ -9,5 +9,5 @@
   <servlet-mapping>
     <servlet-name>hello</servlet-name>
     <url-pattern>/hello</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> -->
 </web-app>

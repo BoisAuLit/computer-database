@@ -26,8 +26,8 @@ public class ConnectionUtils {
   private static final String H2_DRIVER_NAME = "org.h2.Driver";
   private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
 
-  private static Configuration CONFIGURATION;
-  private static String CONNECTION_QUERY;
+  private static Configuration configuration;
+  private static String connectionQuery;
 
   // @formatter:off
   private static final String CONNECTION_QUERY_TEMPLATE =
@@ -43,13 +43,13 @@ public class ConnectionUtils {
   static {
     try {
       if (Objects.isNull(System.getProperty("test"))) {
-        CONFIGURATION = ConfigurationUtils.getConfiguration();
+        configuration = ConfigurationUtils.getConfiguration();
 
         Map<String, String> valuesMap = new HashMap<>();
-        valuesMap.put(DATABASE_TYPE_KEY, CONFIGURATION.getString(DATABASE_TYPE_KEY));
+        valuesMap.put(DATABASE_TYPE_KEY, configuration.getString(DATABASE_TYPE_KEY));
 
         StringSubstitutor ss = new StringSubstitutor(valuesMap);
-        CONNECTION_QUERY = ss.replace(CONNECTION_QUERY_TEMPLATE);
+        connectionQuery = ss.replace(CONNECTION_QUERY_TEMPLATE);
       }
 
       Class.forName(MYSQL_DRIVER_NAME).newInstance();
@@ -62,9 +62,9 @@ public class ConnectionUtils {
   }
 
   public static Connection getMySQLConnection() throws SQLException {
-    String username = CONFIGURATION.getString(USERNAME_KEY);
-    String password = CONFIGURATION.getString(PASSWORD_KEY);
-    connection = DriverManager.getConnection(CONNECTION_QUERY, username, password);
+    String username = configuration.getString(USERNAME_KEY);
+    String password = configuration.getString(PASSWORD_KEY);
+    connection = DriverManager.getConnection(connectionQuery, username, password);
     return connection;
   }
 

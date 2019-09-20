@@ -65,7 +65,9 @@ public final class Main {
     // cm.close();
   }
 
-  @SuppressWarnings("unused")
+  /**
+   * Test logger.
+   */
   private static void testLogger() {
     // Logger logger = LoggerFactory.getLogger("com.excilys.cdb.Main");
     // logger.debug("Hello world.");
@@ -75,6 +77,9 @@ public final class Main {
     // StatusPrinter.print(lc);
   }
 
+  /**
+   * Entry point.
+   */
   public static void main(final String[] args) throws SQLException, ClassNotFoundException {
     testDAO();
   }

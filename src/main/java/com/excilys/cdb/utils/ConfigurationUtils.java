@@ -17,11 +17,11 @@ public class ConfigurationUtils {
   private static final String CONFIG_FILE_SYS_PROP_KEY = "config";
 
   private static class LazyHolder {
-    static Configuration CONFIGURATION = null;
+    static Configuration configuration = null;
 
     static {
       try {
-        CONFIGURATION = readConfigFiles();
+        configuration = readConfigFiles();
       } catch (ConfigurationException e) {
         logger.error("Failed reading configuration file", e);
         System.exit(1);
@@ -30,7 +30,7 @@ public class ConfigurationUtils {
   }
 
   public static Configuration getConfiguration() {
-    return LazyHolder.CONFIGURATION;
+    return LazyHolder.configuration;
   }
 
   /**
