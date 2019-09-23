@@ -1,6 +1,8 @@
 package com.excilys.cdb.domain;
 
-import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public final class Company {
   private long id;
@@ -34,12 +36,20 @@ public final class Company {
 
   @Override
   public String toString() {
-    return "Company [id=" + id + ", name=" + name + "]";
+    return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        .append("id", id)
+        .append("name", name)
+        .toString();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+
+    return (int) id * 7;
+    // return new HashCodeBuilder()
+    // .append(id)
+    // .append(name)
+    // .toHashCode();
   }
 
   @Override
@@ -51,7 +61,11 @@ public final class Company {
       return false;
     }
     Company other = (Company) obj;
-    return id == other.id;
+    return new EqualsBuilder()
+        .appendSuper(super.equals(obj))
+        .append(id, other.id)
+        .append(name, other.name)
+        .isEquals();
   }
 
 }

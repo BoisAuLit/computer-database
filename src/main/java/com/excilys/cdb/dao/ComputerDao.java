@@ -2,6 +2,7 @@ package com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +28,9 @@ public class ComputerDao implements Dao<Computer> {
   public static final String DATE_DISCONTINUED_COLUMN_NAME = "discontinued";
   public static final String COMPANY_ID_COLUMN_NAME = "company_id";
 
-//@formatter:off
   private static final String GET_QUERY =
       "SELECT id, name, introduced, discontinued, company_id "
-      + "FROM computer WHERE id=?";
+          + "FROM computer WHERE id=?";
 
   private static final String GET_ALL_QUERY = "SELECT "
       + "c1.id as id, "
@@ -45,29 +45,41 @@ public class ComputerDao implements Dao<Computer> {
 
   private static final String SAVE_QUERY =
       "INSERT INTO "
-      + "computer(id, name, introduced, discontinued, company_id) "
-      + "VALUES(?, ?, ?, ?, ?)";
+          + "computer(id, name, introduced, discontinued, company_id) "
+          + "VALUES(?, ?, ?, ?, ?)";
 
   private static final String UPDATE_QUERY =
       "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 
   private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
-//@formatter:on
 
-  // Error messages
+  /* Error messages */
   private static final String ERROR_MESSAGE_PREFIX = "Error happpend when ";
   private static final String GET_ERROR = ERROR_MESSAGE_PREFIX + "getting computer by id";
   private static final String GET_ALL_ERROR = ERROR_MESSAGE_PREFIX + "getting all computers";
   private static final String SAVE_ERROR = ERROR_MESSAGE_PREFIX + "creating a record of computer";
 
-  private static final String COMPNAY_ID_NOT_VALID_ERROR =
-      "When you insert a company record, please make sure that the computer id is valid!";
+  // Error messages for saving a computer
+  private static final String SAVE_COMPUTER_CANNOT_BE_NULL_ERROR =
+      "The computer to be saved cannot be null!";
+  private static final String SAVE_LACK_NAME_ERROR = "When crearting a new computer, "
+      + "you must provide the computer's name!";
+  private static final String SAVE_DATE_ERROR =
+      "When creating a computer, the discontinued date must be later than introduced date!";
+
+  // Error messages for updating a computer
+  private static final String UPDATE_COMPUTER_CANNOT_BE_NULL_ERROR =
+      "The computer to be updated cannot be null!";
+  private static final String UPDATE_COMPUTER_NAME_ERROR =
+      "The name of the computer to be udpated CANNOT BE NULL!";
+  private static final String UPDATE_DATE_ERROR =
+      "When updating a computer, the discontinued date must be later than introduced date!";
+
   private static final String UPDATE_ERROR =
       ERROR_MESSAGE_PREFIX + "updating a record of computer!";
   private static final String DELETE_ERROR =
       ERROR_MESSAGE_PREFIX + "deleting a record of computer!";
 
-  private static final CompanyDao COMPANY_DAO = CompanyDao.getInstance();
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
   private ComputerDao() {
@@ -81,6 +93,37 @@ public class ComputerDao implements Dao<Computer> {
 
   public static ComputerDao getInstance() {
     return LazyHolder.INSTANCE;
+  }
+
+  private static boolean checkDates(Computer c) {
+
+    Optional<LocalDate> introducedOpt = c.getIntroduced();
+    Optional<LocalDate> discontinuedOpt = c.getDiscontinued();
+
+    if (introducedOpt.isPresent() && discontinuedOpt.isPresent()) {
+      LocalDate introduced = introducedOpt.get();
+      LocalDate discontinued = discontinuedOpt.get();
+      if (!discontinued.isAfter(introduced)) {
+        logger.error(SAVE_DATE_ERROR);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static boolean checkComputerValidity(Computer c) {
+    if (!Objects.nonNull(c)) {
+      logger.error(SAVE_COMPUTER_CANNOT_BE_NULL_ERROR);
+      return false;
+    }
+
+    if (!Objects.nonNull(c.getName())) {
+      logger.error(SAVE_LACK_NAME_ERROR);
+      return false;
+    }
+
+    return checkDates(c);
   }
 
   @Override
@@ -119,24 +162,22 @@ public class ComputerDao implements Dao<Computer> {
 
   @Override
   public int save(Computer c) {
+
+    if (!checkComputerValidity(c)) {
+      return 0;
+    }
+
+    /* We won't use the id of the compnay object passed as argument, we will use auto-increment */
     try (Connection connection = ConnectionUtils.getConnection()) {
-      long companyId;
-      int rowsAffected;
-      if (c.getCompany().isPresent()) {
-        companyId = c.getCompany().get().getId();
 
-        Optional<Company> company = COMPANY_DAO.get(companyId);
+      Optional<Company> companyOpt = c.getCompany();
 
-        company.orElseThrow(() -> new SQLException(COMPNAY_ID_NOT_VALID_ERROR));
-
-        rowsAffected = QUERY_RUNNER.update(connection, SAVE_QUERY, null, c.getName(),
-            c.getIntroduced(), c.getDiscontinued(), companyId);
-      } else {
-        rowsAffected = QUERY_RUNNER.update(connection, SAVE_QUERY, null, c.getName(),
-            c.getIntroduced(), c.getDiscontinued(), null);
-      }
-
-      return rowsAffected;
+      return QUERY_RUNNER.update(connection, SAVE_QUERY,
+          null,
+          c.getName(),
+          c.getIntroduced().orElse(null),
+          c.getDiscontinued().orElse(null),
+          companyOpt.isPresent() ? companyOpt.get().getId() : null);
     } catch (SQLException e) {
       logger.error(SAVE_ERROR, e);
     }
@@ -145,9 +186,21 @@ public class ComputerDao implements Dao<Computer> {
 
   @Override
   public int update(Computer c) {
+
+    if (!checkComputerValidity(c)) {
+      return 0;
+    }
+
     try (Connection conneciton = ConnectionUtils.getConnection()) {
-      int rowsAffected = QUERY_RUNNER.update(conneciton, UPDATE_QUERY, c.getName(),
-          c.getIntroduced(), c.getDiscontinued(), c.getCompany(), c.getId());
+
+      Optional<Company> companyOpt = c.getCompany();
+
+      int rowsAffected = QUERY_RUNNER.update(conneciton, UPDATE_QUERY,
+          c.getName(),
+          c.getIntroduced().orElse(null),
+          c.getDiscontinued().orElse(null),
+          companyOpt.isPresent() ? companyOpt.get().getId() : null,
+          c.getId());
       return rowsAffected;
     } catch (SQLException e) {
       logger.error(UPDATE_ERROR, e);

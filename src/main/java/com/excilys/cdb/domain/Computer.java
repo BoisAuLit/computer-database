@@ -3,13 +3,16 @@ package com.excilys.cdb.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public final class Computer {
   private long id;
   private String name;
-  private Optional<LocalDate> introduced;
-  private Optional<LocalDate> discontinued;
-  private Optional<Company> company;
+  private Optional<LocalDate> introduced = Optional.empty();
+  private Optional<LocalDate> discontinued = Optional.empty();
+  private Optional<Company> company = Optional.empty();
 
   public long getId() {
     return id;
@@ -53,8 +56,14 @@ public final class Computer {
 
   @Override
   public String toString() {
-    return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced
-        + ", discontinued=" + discontinued + ", company=" + company + "]";
+
+    return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        .append("id", id)
+        .append("name", name)
+        .append("introduced", introduced)
+        .append("discontinued", discontinued)
+        .append("compnay", company)
+        .toString();
   }
 
   @Override
@@ -62,15 +71,36 @@ public final class Computer {
     return Objects.hash(id);
   }
 
-  @Override
-  public boolean equals(Object obj) {
+  private boolean basicCheck(Object obj) {
     if (this == obj) {
       return true;
     }
     if (!(obj instanceof Computer)) {
       return false;
     }
+    return true;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!basicCheck(obj)) {
+      return false;
+    }
+
     Computer other = (Computer) obj;
     return id == other.id;
+  }
+
+  public boolean StrictlyEqauls(Object obj) {
+    if (!basicCheck(obj)) {
+      return false;
+    }
+    Computer other = (Computer) obj;
+
+    return new EqualsBuilder()
+        .append(id, other.id)
+        .append(name, other.name)
+        .isEquals();
+
   }
 }
