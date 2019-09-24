@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dao.mappers.ComputerHandler;
@@ -21,6 +22,36 @@ import com.excilys.cdb.utils.ConnectionUtils;
 public class ComputerDao implements Dao<Computer> {
 
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
+
+  private static final String GENERAL_ERROR_PREFIX = "Error happend when ";
+
+  public enum ComputerDaoErrors {
+    // General errors
+    GET_ERROR(GENERAL_ERROR_PREFIX + "getting computer by id!"),
+    GET_ALL_ERROR(GENERAL_ERROR_PREFIX + "getting all computers!"),
+    SAVE_ERROR(GENERAL_ERROR_PREFIX + "saving a computer!"),
+    UPDATE_ERROR(GENERAL_ERROR_PREFIX + "updating a computer!"),
+    DELETE_ERROR(GENERAL_ERROR_PREFIX + "deleting a computer!"),
+
+    // save() / update() / delete() errors
+    INVALID_COMPUTER_ARGUEMNT_ERROR("The arguemnt computer object cannot be null!"),
+    // save() / update() errors
+    LACK_NAME_ERROR("The name should be provided!"),
+    INVALID_COMPANY_ERROR("The company should exist in the database!"),
+    INVALID_DATE_ERROR("The discontinued date should be later than the introduced date!"),
+    // update() / delete() errors
+    INVALID_ID_ERROR("The id doesn't exist in the database!");
+
+    private String message;
+
+    private ComputerDaoErrors(String message) {
+      this.message = message;
+    }
+
+    public String getMessage() {
+      return message;
+    }
+  }
 
   public static final String ID_COLUMN_NAME = "id";
   public static final String NAME_COLUMN_NAME = "name";
@@ -53,33 +84,6 @@ public class ComputerDao implements Dao<Computer> {
 
   private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
 
-  /* Error messages */
-  private static final String ERROR_MESSAGE_PREFIX = "Error happpend when ";
-  private static final String GET_ERROR = ERROR_MESSAGE_PREFIX + "getting computer by id";
-  private static final String GET_ALL_ERROR = ERROR_MESSAGE_PREFIX + "getting all computers";
-  private static final String SAVE_ERROR = ERROR_MESSAGE_PREFIX + "creating a record of computer";
-
-  // Error messages for saving a computer
-  private static final String SAVE_COMPUTER_CANNOT_BE_NULL_ERROR =
-      "The computer to be saved cannot be null!";
-  private static final String SAVE_LACK_NAME_ERROR = "When crearting a new computer, "
-      + "you must provide the computer's name!";
-  private static final String SAVE_DATE_ERROR =
-      "When creating a computer, the discontinued date must be later than introduced date!";
-
-  // Error messages for updating a computer
-  private static final String UPDATE_COMPUTER_CANNOT_BE_NULL_ERROR =
-      "The computer to be updated cannot be null!";
-  private static final String UPDATE_COMPUTER_NAME_ERROR =
-      "The name of the computer to be udpated CANNOT BE NULL!";
-  private static final String UPDATE_DATE_ERROR =
-      "When updating a computer, the discontinued date must be later than introduced date!";
-
-  private static final String UPDATE_ERROR =
-      ERROR_MESSAGE_PREFIX + "updating a record of computer!";
-  private static final String DELETE_ERROR =
-      ERROR_MESSAGE_PREFIX + "deleting a record of computer!";
-
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
   private ComputerDao() {
@@ -95,37 +99,6 @@ public class ComputerDao implements Dao<Computer> {
     return LazyHolder.INSTANCE;
   }
 
-  private static boolean checkDates(Computer c) {
-
-    Optional<LocalDate> introducedOpt = c.getIntroduced();
-    Optional<LocalDate> discontinuedOpt = c.getDiscontinued();
-
-    if (introducedOpt.isPresent() && discontinuedOpt.isPresent()) {
-      LocalDate introduced = introducedOpt.get();
-      LocalDate discontinued = discontinuedOpt.get();
-      if (!discontinued.isAfter(introduced)) {
-        logger.error(SAVE_DATE_ERROR);
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private static boolean checkComputerValidity(Computer c) {
-    if (!Objects.nonNull(c)) {
-      logger.error(SAVE_COMPUTER_CANNOT_BE_NULL_ERROR);
-      return false;
-    }
-
-    if (!Objects.nonNull(c.getName())) {
-      logger.error(SAVE_LACK_NAME_ERROR);
-      return false;
-    }
-
-    return checkDates(c);
-  }
-
   @Override
   public Optional<Computer> get(long id) {
     try (Connection connection = ConnectionUtils.getConnection()) {
@@ -138,7 +111,7 @@ public class ComputerDao implements Dao<Computer> {
       return Optional.empty();
 
     } catch (SQLException e) {
-      logger.error(GET_ERROR, e);
+      logger.error(ComputerDaoErrors.GET_ERROR.getMessage(), e);
     }
     return Optional.empty();
   }
@@ -155,7 +128,7 @@ public class ComputerDao implements Dao<Computer> {
 
       return computers;
     } catch (SQLException e) {
-      logger.error(GET_ALL_ERROR, e);
+      logger.error(ComputerDaoErrors.GET_ALL_ERROR.getMessage(), e);
     }
     return computers;
   }
@@ -163,7 +136,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int save(Computer c) {
 
-    if (!checkComputerValidity(c)) {
+    if (!checkSaveComputerValidity(c)) {
       return 0;
     }
 
@@ -179,7 +152,7 @@ public class ComputerDao implements Dao<Computer> {
           c.getDiscontinued().orElse(null),
           companyOpt.isPresent() ? companyOpt.get().getId() : null);
     } catch (SQLException e) {
-      logger.error(SAVE_ERROR, e);
+      logger.error(ComputerDaoErrors.SAVE_ERROR.getMessage(), e);
     }
     return 0;
   }
@@ -187,7 +160,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int update(Computer c) {
 
-    if (!checkComputerValidity(c)) {
+    if (!checkUpdateComputerValidity(c)) {
       return 0;
     }
 
@@ -203,21 +176,117 @@ public class ComputerDao implements Dao<Computer> {
           c.getId());
       return rowsAffected;
     } catch (SQLException e) {
-      logger.error(UPDATE_ERROR, e);
+      logger.error(ComputerDaoErrors.UPDATE_ERROR.getMessage(), e);
     }
     return 0;
   }
 
   @Override
   public int delete(Computer c) {
+
+    if (!checkDeleteComputerValidity(c)) {
+      return 0;
+    }
+
     try (Connection connection = ConnectionUtils.getConnection()) {
       int rowsAffected = QUERY_RUNNER.update(connection, DELETE_QUERY, c.getId());
       return rowsAffected;
     } catch (SQLException e) {
-      logger.error(DELETE_ERROR, e);
+      logger.error(ComputerDaoErrors.DELETE_ERROR.getMessage(), e);
     }
 
     return 0;
+  }
+
+  /**
+   * Following are the methods to check argument validity for
+   * save(), update() & delete() method
+   */
+
+  private static boolean checkDatesValidity(Computer c) {
+
+    Optional<LocalDate> introducedOpt = c.getIntroduced();
+    Optional<LocalDate> discontinuedOpt = c.getDiscontinued();
+
+    if (introducedOpt.isPresent() && discontinuedOpt.isPresent()) {
+      LocalDate introduced = introducedOpt.get();
+      LocalDate discontinued = discontinuedOpt.get();
+
+      if (!discontinued.isAfter(introduced)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static boolean checkIdValidity(Computer c) {
+    Optional<Computer> computerOpt = ComputerDao.getInstance().get(c.getId());
+    return computerOpt.isPresent();
+  }
+
+  private static boolean checkCompanyValidity(Computer c) {
+
+    Optional<Company> companyOpt = c.getCompany();
+    if (!companyOpt.isPresent()) {
+      return true;
+    }
+
+    long companyId = companyOpt.get().getId();
+
+    return CompanyDao.getInstance().get(companyId).isPresent();
+  }
+
+  private static boolean checkSaveComputerValidity(Computer c) {
+    if (!Objects.nonNull(c)) {
+      logger.error(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR.getMessage());
+      return false;
+    }
+
+    if (StringUtils.isEmpty(c.getName())) {
+      logger.error(ComputerDaoErrors.LACK_NAME_ERROR.getMessage());
+      return false;
+    }
+
+    if (!checkDatesValidity(c)) {
+      logger.error(ComputerDaoErrors.INVALID_DATE_ERROR.getMessage());
+      return false;
+    }
+
+    if (!checkCompanyValidity(c)) {
+      logger.error(ComputerDaoErrors.INVALID_COMPANY_ERROR.getMessage());
+      return false;
+    }
+
+    return true;
+  }
+
+  private static boolean checkUpdateComputerValidity(Computer c) {
+    if (!checkSaveComputerValidity(c)) {
+      return false;
+    }
+
+    if (!checkIdValidity(c)) {
+      logger.error(ComputerDaoErrors.INVALID_ID_ERROR.getMessage());
+      return false;
+    }
+
+    return true;
+  }
+
+  private static boolean checkDeleteComputerValidity(Computer c) {
+
+    if (!Objects.nonNull(c)) {
+      logger.error(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR.getMessage());
+      return false;
+    }
+
+    if (!checkIdValidity(c)) {
+      logger.error(ComputerDaoErrors.INVALID_ID_ERROR.getMessage());
+      return false;
+    }
+
+    return true;
   }
 
 }

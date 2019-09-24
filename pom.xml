@@ -149,7 +149,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
-		<junit-jupiter.version>5.2.0</junit-jupiter.version>
+		<junit-jupiter.version>5.4.0</junit-jupiter.version>
 	</properties>
 
 

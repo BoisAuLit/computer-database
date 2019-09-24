@@ -75,7 +75,7 @@ public final class Computer {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Computer)) {
+    if ((getClass() != obj.getClass())) {
       return false;
     }
     return true;
@@ -100,6 +100,9 @@ public final class Computer {
     return new EqualsBuilder()
         .append(id, other.id)
         .append(name, other.name)
+        .append(introduced, other.introduced)
+        .append(discontinued, other.discontinued)
+        .append(company, other.company)
         .isEquals();
 
   }

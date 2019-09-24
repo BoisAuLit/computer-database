@@ -1,6 +1,6 @@
 package com.excilys.cdb.domain;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
+import java.util.Objects;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -44,12 +44,7 @@ public final class Company {
 
   @Override
   public int hashCode() {
-
-    return (int) id * 7;
-    // return new HashCodeBuilder()
-    // .append(id)
-    // .append(name)
-    // .toHashCode();
+    return Objects.hash(id);
   }
 
   @Override
@@ -57,15 +52,14 @@ public final class Company {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Company)) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
       return false;
     }
     Company other = (Company) obj;
-    return new EqualsBuilder()
-        .appendSuper(super.equals(obj))
-        .append(id, other.id)
-        .append(name, other.name)
-        .isEquals();
+    return id == other.id && Objects.equals(name, other.name);
   }
 
 }

@@ -78,4 +78,5 @@ public class CompanyDao implements Dao<Company> {
   public int delete(Company c) {
     throw new UnsupportedOperationException();
   }
+
 }
