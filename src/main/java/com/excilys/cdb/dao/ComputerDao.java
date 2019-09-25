@@ -42,9 +42,9 @@ public class ComputerDao implements Dao<Computer> {
     // update() / delete() errors
     INVALID_ID_ERROR("The id doesn't exist in the database!");
 
-    private String message;
+    String message;
 
-    private ComputerDaoErrors(String message) {
+    ComputerDaoErrors(String message) {
       this.message = message;
     }
 

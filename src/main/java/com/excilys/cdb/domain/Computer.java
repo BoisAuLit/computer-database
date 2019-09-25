@@ -91,7 +91,7 @@ public final class Computer {
     return id == other.id;
   }
 
-  public boolean StrictlyEqauls(Object obj) {
+  public boolean strictlyEqauls(Object obj) {
     if (!basicCheck(obj)) {
       return false;
     }

@@ -1,13 +1,22 @@
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http:/java.sun.com/dtd/web-app_2_3.dtd">
-<!--   <servlet>
-    <servlet-name>hello</servlet-name>
-    <servlet-class>com.excilys.cdb.servlets.HelloServlet</servlet-class>
-  </servlet>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http:/java.sun.com/dtd/web-app_2_3.dtd">
 
-  <servlet-mapping>
-    <servlet-name>hello</servlet-name>
-    <url-pattern>/hello</url-pattern>
-  </servlet-mapping> -->
+<!-- 	<servlet>
+		<servlet-name>HelloWorld</servlet-name>
+		<servlet-class>com.excilys.cdb.servlets.HelloWorld</servlet-class>
+		<description>Ma première servlet de test.</description>
+		<init-param>
+			<param-name>auteur</param-name>
+			<param-value>Coyote</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>HelloWorld</servlet-name>
+		<url-pattern>/hello</url-pattern>
+	</servlet-mapping> -->
+
 </web-app>

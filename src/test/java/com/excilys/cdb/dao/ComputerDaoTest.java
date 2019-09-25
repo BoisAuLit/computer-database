@@ -199,7 +199,7 @@ public class ComputerDaoTest {
     assertTrue(computerOpt.isPresent());
     Computer computer = computerOpt.get();
     // Then
-    assertTrue(VALID_COMPUTER.StrictlyEqauls(computer));
+    assertTrue(VALID_COMPUTER.strictlyEqauls(computer));
   }
 
   @Test
@@ -231,7 +231,7 @@ public class ComputerDaoTest {
     assertTrue(Objects.nonNull(computer));
     // Then
     assertEquals(20, computers.size());
-    assertTrue(VALID_COMPUTER.StrictlyEqauls(computer));
+    assertTrue(VALID_COMPUTER.strictlyEqauls(computer));
   }
 
   @Test
@@ -313,7 +313,7 @@ public class ComputerDaoTest {
     // Then
     assertEquals(1, rowsAffected);
     assertTrue(computerOpt.isPresent());
-    assertTrue(VALID_COMPUTER_TO_SAVE.StrictlyEqauls(computerOpt.get()));
+    assertTrue(VALID_COMPUTER_TO_SAVE.strictlyEqauls(computerOpt.get()));
   }
 
   @Test
@@ -409,7 +409,7 @@ public class ComputerDaoTest {
     // Then
     assertEquals(1, rowsAffected);
     assertTrue(computerOpt.isPresent());
-    assertTrue(VALID_COMPUTER_TO_UPDATE.StrictlyEqauls(computerOpt.get()));
+    assertTrue(VALID_COMPUTER_TO_UPDATE.strictlyEqauls(computerOpt.get()));
   }
 
   @Test
