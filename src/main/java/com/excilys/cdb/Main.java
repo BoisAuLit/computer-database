@@ -68,6 +68,7 @@ public final class Main {
   /**
    * Test logger.
    */
+  @SuppressWarnings("unused")
   private static void testLogger() {
     // Logger logger = LoggerFactory.getLogger("com.excilys.cdb.Main");
     // logger.debug("Hello world.");
