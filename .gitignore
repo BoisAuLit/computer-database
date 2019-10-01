@@ -1,7 +1,7 @@
 /target/
 /properties/
-/.classpath
-/.project
+.classpath
+.project
 /.settings/
 /.umlproject
-
+/src/bin/
