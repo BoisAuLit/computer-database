@@ -22,7 +22,7 @@
         Computer Database </a>
     </div>
   </header>
-<!-- 
+
   <section id="main">
     <div class="container">
       <div class="row">
@@ -32,21 +32,21 @@
 
           <form action="editComputer" method="POST">
             <input type="hidden" value="0" id="id" />
-            TODO: Change this value with the computer id
+            Computer id: ${ param["id"] }
             <fieldset>
               <div class="form-group">
                 <label for="computerName">Computer name</label> <input
                   type="text" class="form-control" id="computerName"
-                  placeholder="Computer name">
+                  placeholder="${ param['name']}">
               </div>
               <div class="form-group">
                 <label for="introduced">Introduced date</label> <input
-                  type="date" class="form-control" id="introduced"
+                  type="date" value="${ param['introduced'] }" class="form-control" id="introduced"
                   placeholder="Introduced date">
               </div>
               <div class="form-group">
                 <label for="discontinued">Discontinued date</label> <input
-                  type="date" class="form-control" id="discontinued"
+                  type="date" value="${ param['discontinued'] }" class="form-control" id="discontinued"
                   placeholder="Discontinued date">
               </div>
               <div class="form-group">
@@ -65,8 +65,13 @@
       </div>
     </div>
   </section>
- -->
-  <h1>${ computer.name }</h1>
+
+  <h1>id: ${ param["id"] }</h1>
+  <h1>name: ${ param["name"] }</h1>
+  <h1>introduced: ${ param["introduced"] }</h1>
+  <h1>discontinued: ${ param["discontinued"] }</h1>
+  <h1>company id: ${ param["companyId"] }</h1>
+  <h1>company name: ${ param["companyName"] }</h1>
 
 </body>
 </html>

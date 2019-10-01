@@ -9,23 +9,23 @@
 </head>
 
 <body>
-  	<strong>All the computer comapanies</strong>
-	<table border="1">
-		<tr>
-			<th>id</th>
-			<th>name</th>
-		</tr>
-		<c:forEach var="company" items="${companies}">
-			<tr>
-				<td>${company.id}</td>
-				<td>${company.name }</td>
-			</tr>
-		</c:forEach>
-	</table>
+  <strong>All the computer comapanies</strong>
+  <table border="1">
+    <tr>
+      <th>id</th>
+      <th>name</th>
+    </tr>
+    <c:forEach var="company" items="${companies}">
+      <tr>
+        <td>${company.id}</td>
+        <td>${company.name }</td>
+      </tr>
+    </c:forEach>
+  </table>
 
 
 
-<!--   <div id="wrapper">
+  <!--   <div id="wrapper">
     <h1>Sortable Table of Search Queries</h1>
 
     <table id="keywords" cellspacing="0" cellpadding="0">
@@ -84,5 +84,27 @@
       </tbody>
     </table>
   </div> -->
+
+
+
+
+  <h1>&lt;c:param&gt; Demo</h1>
+  <c:url var="myURL" value="/tag-types/core/param.jsp">
+    <c:param name="param1" value="value1" />
+    <c:param name="param2" value="value2" />
+  </c:url>
+  <a href="/<c:out value="${myURL}"/>"> Click to send two test
+    parametets and values using &lt;c:param&gt;</a>
+  <br />
+  <br />
+  <c:if test="${not empty param.param1 && not empty param.param2}">
+      Param1
+      <c:out value="${param.param1}" />
+    <br />
+      Param2
+      <c:out value="${param.param2}" />
+  </c:if>
+
+
 </body>
 </html>

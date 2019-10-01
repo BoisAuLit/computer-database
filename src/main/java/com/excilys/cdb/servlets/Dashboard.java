@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.domain.Computer;
+import com.excilys.cdb.dto.ComputerDto;
+import com.excilys.cdb.dto.DtoBuilder;
 
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
@@ -19,8 +21,9 @@ public class Dashboard extends HttpServlet {
       throws ServletException, IOException {
 
     List<Computer> computers = ComputerDao.getInstance().getAll();
+    List<ComputerDto> computerDtos = DtoBuilder.getComputerDtoList(computers);
 
-    request.setAttribute("computers", computers);
+    request.setAttribute("computers", computerDtos);
 
     this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
         request,

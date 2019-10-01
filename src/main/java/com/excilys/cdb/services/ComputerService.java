@@ -1,5 +1,5 @@
 package com.excilys.cdb.services;
 
-public class ServicePlaceHolder {
+public class ComputerService {
 
 }

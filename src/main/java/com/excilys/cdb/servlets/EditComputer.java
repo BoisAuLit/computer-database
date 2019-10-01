@@ -18,10 +18,6 @@ public class EditComputer extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    // Computer computer = (Computer) request.getAttribute("computer");
-    //
-    // request.setAttribute("computer", computer);
-
     this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
         request,
         response);

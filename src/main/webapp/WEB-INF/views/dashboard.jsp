@@ -17,9 +17,8 @@
 <link href="${pageContext.request.contextPath}/css/main.css"
   rel="stylesheet" media="screen">
 
-
-
 </head>
+
 <body>
   <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -30,7 +29,7 @@
 
   <section id="main">
     <div class="container">
-      <h1 id="homeTitle">${ computers.size() }Computersfound</h1>
+      <h1 id="homeTitle">${ computers.size() }&nbsp;Computers&nbsp;found</h1>
       <div id="actions" class="form-horizontal">
         <div class="pull-left">
           <form id="searchForm" action="#" method="GET"
@@ -60,29 +59,10 @@
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <!-- Variable declarations for passing labels as parameters -->
-
-            <!-- Table header for Computer Name -->
-
-            <th class="editMode" style="width: 60px; height: 22px;">
-              <input type="checkbox" id="selectall" /> <span
-              style="vertical-align: top;"> - <a href="#"
-                id="deleteSelected" onclick="$.fn.deleteSelected();">
-                  <i class="fa fa-trash-o fa-lg"></i>
-              </a>
-            </span>
-            </th>
-
             <th>Computer name</th>
-
             <th>Introduced date</th>
-
-            <!-- Table header for Discontinued Date -->
             <th>Discontinued date</th>
-
-            <!-- Table header for Company -->
             <th>Company</th>
-
           </tr>
         </thead>
         <!-- Browse attribute computers -->
@@ -91,23 +71,24 @@
         <tbody id="results">
 
           <c:forEach var="computer" items="${ computers }">
+
+            <c:url var="editComputerUrl" value="/editComputer.jsp">
+              <c:param name="id" value="${ computer.id }" />
+              <c:param name="name" value="${ computer.name }" />
+            </c:url>
+
             <tr>
-
-              <%-- <c:set var="computer-${ computer.id }" scope="request"
-                value="${ computer }" /> --%>
-
-              <td class="editMode"><input type="checkbox" name="cb"
-                class="cb" value="0"></td>
-
-              <td><a href="edit-computer"
-                onclick="test('${computer.id}')">${ computer.name }</a></td>
-
-              <%--               <td><a href="edit-computer"
-                onclick="set_attribute('${ computer }')">${ computer.name }</a></td> --%>
-
-              <td>2006-01-10</td>
-              <td></td>
-              <td>Apple Inc.</td>
+              <td><a
+                href="edit-computer?id=${computer.id}
+              &name=${computer.name}
+              &introduced=${computer.introduced}
+              &discontinued=${computer.discontinued}
+              &companyId=${computer.companyId}
+              &companyName=${computer.companyName}">${ computer.name }</a></td>
+              <%-- <td><a href="">${ computer.name }</a></td> --%>
+              <td>${ computer.introduced }</td>
+              <td>${ computer.discontinued }</td>
+              <td>${ computer.companyName }</td>
             </tr>
           </c:forEach>
 
@@ -132,23 +113,27 @@
             aria-hidden="true">&raquo;</span>
         </a></li>
       </ul>
+    </div>
 
-      <div class="btn-group btn-group-sm pull-right" role="group">
-        <button type="button" class="btn btn-default">10</button>
-        <button type="button" class="btn btn-default">50</button>
-        <button type="button" class="btn btn-default">100</button>
-      </div>
+    <div class="btn-group btn-group-sm pull-right" role="group">
+      <button type="button" class="btn btn-default">10</button>
+      <button type="button" class="btn btn-default">50</button>
+      <button type="button" class="btn btn-default">100</button>
+    </div>
+
   </footer>
 
   <script type="text/javascript">
-			function set_attribute(computer) {
-				/* application.setAttribute("computer", computer) */
-				alert('cousin')
-				alert(computer)
-			}
-			
-			function test(cousin) {
-				alert(cousin)
+			function test() {
+
+				var url = window.location.href
+				var base_url = url.substring(0, url.lastIndexOf('/'));
+				var result_url = base_url + '/edit-computer'
+				/* alert(result_url) */
+				/* window.location = result_url; */
+				/* window.location = "/edit-computer" */
+				window.location.href = "http://www.google.fr";
+
 			}
 		</script>
 
