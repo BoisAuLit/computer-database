@@ -27,32 +27,40 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-8 col-xs-offset-2 box">
-          <div class="label label-default pull-right">id: 0</div>
+          <div class="label label-default pull-right">id: ${ param["id"] }</div>
           <h1>Edit Computer</h1>
 
           <form action="editComputer" method="POST">
-            <input type="hidden" value="0" id="id" />
-            Computer id: ${ param["id"] }
+            <input type="hidden" value="0" id="id" /> Computer id: ${ param["id"] }
             <fieldset>
               <div class="form-group">
                 <label for="computerName">Computer name</label> <input
                   type="text" class="form-control" id="computerName"
-                  placeholder="${ param['name']}">
+                  placeholder="${param['name']}">
               </div>
               <div class="form-group">
-                <label for="introduced">Introduced date</label> <input
-                  type="date" value="${ param['introduced'] }" class="form-control" id="introduced"
+                <label for="introduced">Introduced date (old
+                  date - ${ param["introduced"] })</label> <input type="date"
+                  value="" class="form-control" id="introduced"
                   placeholder="Introduced date">
               </div>
               <div class="form-group">
-                <label for="discontinued">Discontinued date</label> <input
-                  type="date" value="${ param['discontinued'] }" class="form-control" id="discontinued"
+                <label for="discontinued">Discontinued date (old
+                  date - ${ param["discontinued"] })</label> <input type="date"
+                  value="" class="form-control" id="discontinued"
                   placeholder="Discontinued date">
               </div>
               <div class="form-group">
                 <label for="companyId">Company</label> <select
                   class="form-control" id="companyId">
-                  <option value="0">--</option>
+
+                  <c:forEach var="companyId" items="${ companyIds }">
+
+                    <option value="${companyId}"
+                      ${ companyId.toString().trim() eq param['companyId'].trim()  ? 'selected' : 'cousin' }>
+                      ${ companyId }</option>
+                  </c:forEach>
+
                 </select>
               </div>
             </fieldset>
@@ -72,6 +80,11 @@
   <h1>discontinued: ${ param["discontinued"] }</h1>
   <h1>company id: ${ param["companyId"] }</h1>
   <h1>company name: ${ param["companyName"] }</h1>
+
+
+  <br />
+
+
 
 </body>
 </html>

@@ -71,12 +71,6 @@
         <tbody id="results">
 
           <c:forEach var="computer" items="${ computers }">
-
-            <c:url var="editComputerUrl" value="/editComputer.jsp">
-              <c:param name="id" value="${ computer.id }" />
-              <c:param name="name" value="${ computer.name }" />
-            </c:url>
-
             <tr>
               <td><a
                 href="edit-computer?id=${computer.id}
@@ -85,7 +79,6 @@
               &discontinued=${computer.discontinued}
               &companyId=${computer.companyId}
               &companyName=${computer.companyName}">${ computer.name }</a></td>
-              <%-- <td><a href="">${ computer.name }</a></td> --%>
               <td>${ computer.introduced }</td>
               <td>${ computer.discontinued }</td>
               <td>${ computer.companyName }</td>
@@ -122,20 +115,6 @@
     </div>
 
   </footer>
-
-  <script type="text/javascript">
-			function test() {
-
-				var url = window.location.href
-				var base_url = url.substring(0, url.lastIndexOf('/'));
-				var result_url = base_url + '/edit-computer'
-				/* alert(result_url) */
-				/* window.location = result_url; */
-				/* window.location = "/edit-computer" */
-				window.location.href = "http://www.google.fr";
-
-			}
-		</script>
 
   <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
