@@ -13,7 +13,7 @@ import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.dto.DtoBuilder;
 
 @WebServlet("/dashboard")
-public class Dashboard extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override

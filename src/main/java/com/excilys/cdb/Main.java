@@ -82,6 +82,7 @@ public final class Main {
    * Entry point.
    */
   public static void main(final String[] args) throws SQLException, ClassNotFoundException {
-    testDAO();
+    // testDAO();
+
   }
 }

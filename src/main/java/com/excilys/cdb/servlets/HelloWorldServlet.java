@@ -11,7 +11,7 @@ import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.domain.Company;
 
 @WebServlet("/hello")
-public class HelloWorld extends HttpServlet {
+public class HelloWorldServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
 
