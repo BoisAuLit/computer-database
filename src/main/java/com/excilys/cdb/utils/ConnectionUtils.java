@@ -29,15 +29,13 @@ public class ConnectionUtils {
   private static Configuration configuration;
   private static String connectionQuery;
 
-  // @formatter:off
   private static final String CONNECTION_QUERY_TEMPLATE =
       String.format("jdbc:${%s}://localhost:3306/"
-      + "computer-database-db?"
-      + "useUnicode=true"
-      + "&useJDBCCompliantTimezoneShift=true"
-      + "&useLegacyDatetimeCode=false"
-      + "&serverTimezone=UTC", DATABASE_TYPE_KEY);
-  // @formatter:on
+          + "computer-database-db?"
+          + "useUnicode=true"
+          + "&useJDBCCompliantTimezoneShift=true"
+          + "&useLegacyDatetimeCode=false"
+          + "&serverTimezone=UTC", DATABASE_TYPE_KEY);
 
   private static Connection connection;
   static {

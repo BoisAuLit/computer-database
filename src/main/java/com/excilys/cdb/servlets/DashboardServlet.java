@@ -7,10 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.excilys.cdb.dao.ComputerDao;
-import com.excilys.cdb.domain.Computer;
 import com.excilys.cdb.dto.ComputerDto;
-import com.excilys.cdb.dto.DtoBuilder;
+import com.excilys.cdb.services.ComputerService;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -20,8 +18,7 @@ public class DashboardServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    List<Computer> computers = ComputerDao.getInstance().getAll();
-    List<ComputerDto> computerDtos = DtoBuilder.getComputerDtoList(computers);
+    List<ComputerDto> computerDtos = ComputerService.getInstance().getComputerDtos();
 
     request.setAttribute("computers", computerDtos);
 

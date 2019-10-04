@@ -1,6 +1,8 @@
 package com.excilys.cdb;
 
 import java.sql.SQLException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.domain.Company;
@@ -83,6 +85,41 @@ public final class Main {
    */
   public static void main(final String[] args) throws SQLException, ClassNotFoundException {
     // testDAO();
+
+    // declaration and instantiation of objects/variables
+    // System.setProperty("webdriver.firefox.marionette",
+    // "/home/excilys/driver/geckodriver-v0.25.0-linux64/geckodriver");
+
+    System.setProperty("webdriver.gecko.driver",
+        "/home/excilys/driver/geckodriver-v0.25.0-linux64/geckodriver");
+
+    WebDriver driver = new FirefoxDriver();
+    // comment the above 2 lines and uncomment below 2 lines to use Chrome
+    // System.setProperty("webdriver.chrome.driver","G:\\chromedriver.exe");
+    // WebDriver driver = new ChromeDriver();
+
+    String baseUrl = "http://demo.guru99.com/test/newtours/";
+    String expectedTitle = "Welcome: Mercury Tours";
+    String actualTitle = "";
+
+    // launch Fire fox and direct it to the Base URL
+    driver.get(baseUrl);
+
+    // get the actual value of the title
+    actualTitle = driver.getTitle();
+
+    /*
+     * compare the actual title of the page with the expected one and print
+     * the result as "Passed" or "Failed"
+     */
+    if (actualTitle.contentEquals(expectedTitle)) {
+      System.out.println("Test Passed!");
+    } else {
+      System.out.println("Test Failed");
+    }
+
+    // close Fire fox
+    driver.close();
 
   }
 }

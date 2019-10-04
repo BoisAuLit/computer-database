@@ -1,9 +1,9 @@
 package com.excilys.cdb.servlets;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-class EditComputerServletTest {
+class DashboardServletTest {
 
   @Test
   void test() {

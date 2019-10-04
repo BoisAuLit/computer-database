@@ -1,9 +1,9 @@
 package com.excilys.cdb.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import com.excilys.cdb.dao.CompanyDao;
-import com.excilys.cdb.domain.Company;
+import java.util.Optional;
+import com.excilys.cdb.dto.CompanyDto;
+import com.excilys.cdb.dto.DtoBuilder;
 
 public class CompanyService {
 
@@ -17,10 +17,11 @@ public class CompanyService {
     return LazyHolder.INSTANCE;
   }
 
-  public List<Long> getCompnayIds() {
-    List<Company> companies = CompanyDao.getInstance().getAll();
-    return companies.stream()
-        .map(Company::getId)
-        .collect(Collectors.toList());
+  public Optional<CompanyDto> getCompanyDtoById(long id) {
+    return DtoBuilder.getCompanyDtoById(id);
+  }
+
+  public List<CompanyDto> getCompanyDtos() {
+    return DtoBuilder.getCompanyDtos();
   }
 }

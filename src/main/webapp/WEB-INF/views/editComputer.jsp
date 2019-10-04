@@ -24,53 +24,57 @@
     </div>
   </header>
 
+
   <section id="main">
     <div class="container">
       <div class="row">
         <div class="col-xs-8 col-xs-offset-2 box">
-          <div class="label label-default pull-right">id: ${ param["id"] }</div>
+          <div class="label label-default pull-right">id: ${ computerDto.id }</div>
           <h1>Edit Computer</h1>
 
-          <form action="javascript:validate()" method="POST" id="myForm">
-            <input type="hidden" value="${ param['id'] }" id="id"
+          <form action="edit-computer" method="POST"
+            id="edit-computer-form">
+            <input type="hidden" value="${ computerDto.id }" id="id"
               name="id" />
-            Computer id: ${ param["id"] }
+            Computer id: ${ computerDto.id }
             <fieldset>
+
+              <!-- Computer name field -->
               <div class="form-group">
                 <label for="computerName">Computer name</label>
                 <input type="text" class="form-control"
                   id="computerName" name="computerName"
-                  value="${param['name']}" placeholder="" required>
+                  value="${ computerDto.name }" placeholder="" required>
               </div>
+
+              <!-- Introduced date field -->
               <div class="form-group">
                 <label for="introduced">Introduced date</label>
-                <input type="date" value="${param['introduced'].trim()}"
+                <input type="date" value="${ computerDto.introduced }"
                   class="form-control" id="introduced" name="introduced"
                   placeholder="Introduced date">
               </div>
+
+              <!-- Discontinued date field -->
               <div class="form-group">
                 <label for="discontinued">Discontinued date</label>
-                <input type="date"
-                  value="${ param['discontinued'].trim() }"
+                <input type="date" value="${ computerDto.discontinued }"
                   class="form-control" id="discontinued"
                   name="discontinued" placeholder="Discontinued date">
               </div>
+
+              <!-- Company information field -->
               <div class="form-group">
                 <label for="companyId">Company</label>
                 <select class="form-control" id="companyId"
                   name="companyId">
 
                   <c:forEach var="companyDto" items="${ companyDtos }">
-
-                    <c:set var="companyId" value="${companyDto.id}" />
-                    <c:set var="companyName" value="${companyDto.name}" />
-
-                    <option value="${companyId}"
-                      ${ companyId.toString().trim() eq param['companyId'].trim()  ? 'selected' : 'cousin' }>
-
+                    <option value="${companyDto.id}"
+                      ${ companyDto.id eq computerDto.companyId  ? 'selected' : 'cousin' }>
                       <fmt:formatNumber type="number" pattern="00"
-                        value="${companyId}" />
-                      &nbsp;&nbsp;&nbsp;&nbsp;${ companyName }
+                        value="${companyDto.id}" />
+                      &nbsp;&nbsp;&nbsp;&nbsp;${ companyDto.name }
                     </option>
 
                   </c:forEach>
@@ -89,14 +93,18 @@
   </section>
 
   <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
+  <script src="${pageContext.request.contextPath}/js/jquery.redirect.min.js"></script>
+  <script
+    src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
 
 
-  <h1>id: ${ param["id"] }</h1>
-  <h1>name: ${ param["name"] }</h1>
-  <h1>introduced: ${ param["introduced"] }</h1>
-  <h1>discontinued: ${ param["discontinued"] }</h1>
-  <h1>companyId: ${ param["companyId"] }</h1>
+
+  <h1>id: ${ computerDto.id }</h1>
+  <h1>name: ${ computerDto.name }</h1>
+  <h1>introduced: ${ computerDto.introduced }</h1>
+  <h1>discontinued: ${ computerDto.discontinued }</h1>
+  <h1>companyId: ${ computerDto.companyId }</h1>
+
 
 
 </body>

@@ -36,9 +36,9 @@
             class="form-inline">
 
             <input type="search" id="searchbox" name="search"
-              class="form-control" placeholder="Search name" /> <input
-              type="submit" id="searchsubmit" value="Filter by name"
-              class="btn btn-primary" />
+              class="form-control" placeholder="Search name" />
+            <input type="submit" id="searchsubmit"
+              value="Filter by name" class="btn btn-primary" />
           </form>
         </div>
         <div class="pull-right">
@@ -72,14 +72,8 @@
 
           <c:forEach var="computer" items="${ computers }">
             <tr>
-              <td><a
-                href="edit-computer?id=${computer.id}
-              &name=${computer.name}
-              &introduced=${computer.introduced}
-              &discontinued=${computer.discontinued}
-              &companyId=${computer.companyId}
-              &companyName=${computer.companyName}">${ computer.name }</a></td>
-              
+              <td><a href="edit-computer?id=${computer.id}">${ computer.name }</a></td>
+
               <td>${ computer.introduced }</td>
               <td>${ computer.discontinued }</td>
               <td>${ computer.companyName }</td>
