@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.dto.ComputerDto;
-import com.excilys.cdb.dto.DtoBuilder;
+import com.excilys.cdb.services.CompanyService;
 import com.excilys.cdb.services.ComputerService;
+import com.google.gson.Gson;
 
 /**
  * Servlet implementation class EditComputer
@@ -29,36 +30,34 @@ public class EditComputerServlet extends HttpServlet {
     Optional<ComputerDto> computerDtoOpt = ComputerService.getInstance().getComputerDtoById(id);
     request.setAttribute("computerDto", computerDtoOpt.get());
 
-    List<CompanyDto> companyDtos = DtoBuilder.getCompanyDtos();
+    List<CompanyDto> companyDtos = CompanyService.getInstance().getCompanyDtos();
     request.setAttribute("companyDtos", companyDtos);
 
-    this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
-        request,
-        response);
+    this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp")
+        .forward(request, response);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    StringBuffer jb = new StringBuffer();
-    String line = null;
-    try {
-      BufferedReader reader = request.getReader();
-      while ((line = reader.readLine()) != null) {
-        jb.append(line);
-      }
-    } catch (Exception e) {
-      /* report an error */ }
+    Gson gson = new Gson();
 
-    // try {
-    //
-    //
-    // Json jsonObject = HTTP.toJSONObject(jb.toString());
-    // } catch (JSONException e) {
-    // // crash and burn
-    // throw new IOException("Error parsing JSON request string");
-    // }
+    // Get data from POST body
+    StringBuilder sb = new StringBuilder();
+    String line = null;
+
+    BufferedReader reader = request.getReader();
+    while ((line = reader.readLine()) != null) {
+      sb.append(line);
+    }
+    ComputerDto computerDto = gson.fromJson(sb.toString(), ComputerDto.class);
+    int rowsAffected = ComputerService.getInstance().updateComputer(computerDto);
+    if (rowsAffected == 1) {
+      response.setStatus(200);
+    } else {
+      response.sendError(500);
+    }
   }
 
 }

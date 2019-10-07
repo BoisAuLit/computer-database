@@ -56,14 +56,9 @@ public final class Computer {
 
   @Override
   public String toString() {
-
-    return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-        .append("id", id)
-        .append("name", name)
-        .append("introduced", introduced)
-        .append("discontinued", discontinued)
-        .append("compnay", company)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("id", id)
+        .append("name", name).append("introduced", introduced).append("discontinued", discontinued)
+        .append("compnay", company).toString();
   }
 
   @Override
@@ -97,13 +92,9 @@ public final class Computer {
     }
     Computer other = (Computer) obj;
 
-    return new EqualsBuilder()
-        .append(id, other.id)
-        .append(name, other.name)
-        .append(introduced, other.introduced)
-        .append(discontinued, other.discontinued)
-        .append(company, other.company)
-        .isEquals();
+    return new EqualsBuilder().append(id, other.id).append(name, other.name)
+        .append(introduced, other.introduced).append(discontinued, other.discontinued)
+        .append(company, other.company).isEquals();
 
   }
 }

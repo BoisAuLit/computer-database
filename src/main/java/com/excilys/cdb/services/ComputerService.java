@@ -2,8 +2,10 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 import java.util.Optional;
+import com.excilys.cdb.dao.ComputerDao;
+import com.excilys.cdb.domain.Computer;
 import com.excilys.cdb.dto.ComputerDto;
-import com.excilys.cdb.dto.DtoBuilder;
+import com.excilys.cdb.dto.DtoManager;
 
 public class ComputerService {
 
@@ -18,10 +20,15 @@ public class ComputerService {
   }
 
   public Optional<ComputerDto> getComputerDtoById(long id) {
-    return DtoBuilder.getComputerDtoById(id);
+    return DtoManager.getComputerDtoById(id);
   }
 
   public List<ComputerDto> getComputerDtos() {
-    return DtoBuilder.getComputerDtos();
+    return DtoManager.getComputerDtos();
+  }
+
+  public int updateComputer(ComputerDto computerDto) {
+    Computer computer = DtoManager.getComputer(computerDto);
+    return ComputerDao.getInstance().update(computer);
   }
 }

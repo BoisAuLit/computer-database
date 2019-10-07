@@ -69,7 +69,11 @@
                 <select class="form-control" id="companyId"
                   name="companyId">
 
+                  <option value="-1">No company is specified
+                    for this computer yet.</option>
+
                   <c:forEach var="companyDto" items="${ companyDtos }">
+
                     <option value="${companyDto.id}"
                       ${ companyDto.id eq computerDto.companyId  ? 'selected' : 'cousin' }>
                       <fmt:formatNumber type="number" pattern="00"
@@ -93,7 +97,8 @@
   </section>
 
   <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/jquery.redirect.min.js"></script>
+  <script
+    src="${pageContext.request.contextPath}/js/jquery.redirect.min.js"></script>
   <script
     src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
 

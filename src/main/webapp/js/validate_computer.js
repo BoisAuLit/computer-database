@@ -1,3 +1,35 @@
+
+const today = Date.now()
+// Birth day of the first programmable computer
+const earliest = new Date(1938, 1, 1)
+const date_range_err = "Date cannot be later than today or earlier than 1938-01-01"
+
+function check_date(introducedStr, discontinuedStr){
+  
+  let introduced, discontinued
+  
+  if (introducedStr) {
+    introduced = new Date(introducedStr)
+    if (introduced > today || introduced < earliest) {
+      alert(date_range_err)
+      return false
+    }
+  }
+  
+  if (discontinuedStr) {
+    discontinued = new Date(discontinuedStr)
+    if (discontinued > today || discontinued < earliest) {
+      alert(date_range_err)
+      return false
+    }
+    if (introduced && introduced > discontinued) {
+      alert("Introduced date cannot be later than discontinued date")
+      return false
+    }
+  }
+  return true
+}
+
 function validate() {
 
 	// const id = $("input#id").val()
@@ -7,94 +39,49 @@ function validate() {
 	// const companyId = $("option:selected").val().trim()
 
 	// Name cannot be empyt string
-	if (!name.length) {
+	if (!name) {
 		alert("Name cannot be filled with empty characters!")
 		return false
 	}
-
-	let introducedDate;
-	let discontinuedDate;
-	const introducedExists = introduced.length > 0;
-	const discontinuedExists = discontinued.length > 0;
-	const today = Date.now();
-
-	// Introduced date cannot be in the future !
-	if (introducedExists && (introducedDate = new Date(introduced)) > today) {
-		alert("Introduced Date cannot be in the future!")
-		return false
-	}
-
-	// Discontinued date can be in the future, but cannot be earlier
-	// than today
-	if (discontinuedExists) {
-		if ((discontinuedDate = new Date(discontinued)) > today) {
-			alert("Discontinued Date cannot be in the future!")
-			return false
-		}
-
-		if (introducedExists && introducedDate > discontinuedDate) {
-			alert("Discontinued Date cannot be later than the introduced date!")
-			return false
-		}
-
-	}
-
-	console.log("Form validation pass")
 	
-	return true
-	
+	return check_date(introduced, discontinued)
 }
 
 // Attach a submit handler to the form
-$("#edit-computer-form").submit( event => {
+$("#edit-computer-form").submit(event => {
 
+	// Validate the form
 	if (!validate()) {
 		console.log("Form validation failed")
 		return
+	} else {
+	  console.log("Form validation passed")
 	}
-	
-    // Stop form from submitting normally
-    event.preventDefault();
 
-    // Get some values from elements on the page:
-    const $form = $( this );
+	// Stop form from submitting normally
+	event.preventDefault();
 
-    // We want to customize what we post, therefore we format our data
-// var data = "login="+ $('#login').val() +"&passwordHash=" +
-// CryptoJS.MD5($('#password').val());
-
-    
-    const name = $("input#computerName").val().trim()
+	const id = $("input#id").val().trim();
+	const name = $("input#computerName").val().trim()
 	const introduced = $("input#introduced").val().trim()
 	const discontinued = $("input#discontinued").val().trim()
-    
-	const data = {name, introduced, discontinued}
+	const companyId = $("option:selected").val().trim()
+
+	const dataToPost = {
+		id,
+		name,
+		introduced,
+		discontinued,
+	 	companyId
+	}
 	
-    
-    // For debugging purposes... see your console:
-    // Prints out for example:
-	// login=myLoginName&passwordHash=a011a78a0c8d9e4f0038a5032d7668ab
-    console.log(data);
+	console.log(JSON.stringify(dataToPost))
+	console.log("************************")
+	console.log(dataToPost)
 
-    $.redirect('edit-computer', {'arg1': 'value1', 'arg2': 'value2'});
-    
-//    $.ajax({
-//    	type: "POST",
-//    	url: "edit-computer",
-//    	data
-//    })
-    
-    
-//    $.post("edit-computer", data)
-    
-// // The actual from POST method
-// $.ajax({
-// type: $form.attr('method'),
-// url: $form.attr('action'),
-// data: data,
-// success: data => {
-// console.log("Hey, we got reply form java side, with following data: ");
-// }
-// });
-
-});   
+	$.post("edit-computer", JSON.stringify(dataToPost)).done(data => {
+	  alert("post success", data)
+	}).fail(error => {
+	  alert("post failure", error)
+	})
+});

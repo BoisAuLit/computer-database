@@ -1,6 +1,8 @@
 package com.excilys.cdb.dto;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class CompanyDto implements Serializable {
 
@@ -23,5 +25,13 @@ public class CompanyDto implements Serializable {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        .append("id", id)
+        .append("name", name)
+        .toString();
   }
 }

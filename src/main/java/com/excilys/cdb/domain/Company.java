@@ -13,7 +13,6 @@ public final class Company {
   }
 
   public Company(long id, String name) {
-    super();
     this.id = id;
     this.name = name;
   }

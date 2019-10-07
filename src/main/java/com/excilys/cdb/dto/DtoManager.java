@@ -1,22 +1,22 @@
 package com.excilys.cdb.dto;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 
-public class DtoBuilder {
+public class DtoManager {
 
   private static long LONG_FIELD_ABSENT_SPECIFIER = -1L;
   private static String STRING_FIELD_ABSENT_SPECIFIER = "";
 
-  /**
-   * Transform a {@code Computer} to a {@code ComputerDto}}
-   */
+  // Computer -> ComputerDto
   private static ComputerDto getComputerDto(Computer c) {
     ComputerDto cd = new ComputerDto();
     cd.setId(c.getId());
@@ -47,9 +47,7 @@ public class DtoBuilder {
     return cd;
   }
 
-  /**
-   * Transform a {@code List<Computer>} to a {@code List<ComputerDto>}
-   */
+  // List<Computer> -> List<ComputerDto>
   private static List<ComputerDto> getComputerDtoList(List<Computer> computers) {
 
     List<ComputerDto> computerDtos = new ArrayList<>();
@@ -62,9 +60,7 @@ public class DtoBuilder {
     return computerDtos;
   }
 
-  /**
-   * Transform a {@code Company} to a {@code CompanyDto}
-   */
+  // Company -> CompanyDto
   private static CompanyDto getCompnayDto(Company c) {
 
     CompanyDto cd = new CompanyDto();
@@ -75,9 +71,7 @@ public class DtoBuilder {
     return cd;
   }
 
-  /**
-   * Transform a {@code List<Company>} to a {@code List<CompanyDto>}
-   */
+  // List<Compnay> -> List<CompanyDto>
   private static List<CompanyDto> getCompnayDtoList(List<Company> companies) {
 
     List<CompanyDto> companyDtos = new ArrayList<>();
@@ -125,4 +119,38 @@ public class DtoBuilder {
     List<Company> companies = CompanyDao.getInstance().getAll();
     return getCompnayDtoList(companies);
   }
+
+  // ComputerDto -> Computer
+  public static Computer getComputer(ComputerDto computerDto) {
+    Computer computer = new Computer();
+
+    computer.setId(computerDto.getId());
+    computer.setName(computerDto.getName());
+
+    String introducedStr = computerDto.getIntroduced();
+    String discontinuedStr = computerDto.getDiscontinued();
+    long companyId = computerDto.getCompanyId();
+
+
+    if (!StringUtils.isEmpty(introducedStr)) {
+      introducedStr = StringUtils.stripStart(introducedStr, "0");
+      LocalDate introduced = LocalDate.parse(introducedStr, DateTimeFormatter.ISO_LOCAL_DATE);
+      computer.setIntroduced(Optional.of(introduced));
+    }
+
+    if (!StringUtils.isEmpty(discontinuedStr)) {
+      discontinuedStr = StringUtils.stripStart(discontinuedStr, "0");
+      LocalDate discontinued = LocalDate.parse(discontinuedStr, DateTimeFormatter.ISO_LOCAL_DATE);
+      computer.setDiscontinued(Optional.of(discontinued));
+    }
+
+    if (companyId != LONG_FIELD_ABSENT_SPECIFIER) {
+      Company company = new Company();
+      company.setId(companyId);
+      computer.setCompany(Optional.of(company));
+    }
+
+    return computer;
+  }
+
 }

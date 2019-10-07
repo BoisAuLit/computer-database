@@ -2,7 +2,6 @@ package com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +10,10 @@ import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dao.mappers.ComputerHandler;
+import com.excilys.cdb.dao.validators.ComputerValidator;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 import com.excilys.cdb.utils.ConnectionUtils;
@@ -27,18 +26,18 @@ public class ComputerDao implements Dao<Computer> {
 
   public enum ComputerDaoErrors {
     // General errors
-    GET_ERROR(GENERAL_ERROR_PREFIX + "getting computer by id!"),
-    GET_ALL_ERROR(GENERAL_ERROR_PREFIX + "getting all computers!"),
-    SAVE_ERROR(GENERAL_ERROR_PREFIX + "saving a computer!"),
-    UPDATE_ERROR(GENERAL_ERROR_PREFIX + "updating a computer!"),
-    DELETE_ERROR(GENERAL_ERROR_PREFIX + "deleting a computer!"),
+    GET_ERROR(GENERAL_ERROR_PREFIX + "getting computer by id!"), GET_ALL_ERROR(
+        GENERAL_ERROR_PREFIX + "getting all computers!"), SAVE_ERROR(
+            GENERAL_ERROR_PREFIX + "saving a computer!"), UPDATE_ERROR(
+                GENERAL_ERROR_PREFIX + "updating a computer!"), DELETE_ERROR(
+                    GENERAL_ERROR_PREFIX + "deleting a computer!"),
 
     // save() / update() / delete() errors
     INVALID_COMPUTER_ARGUEMNT_ERROR("The arguemnt computer object cannot be null!"),
     // save() / update() errors
-    LACK_NAME_ERROR("The name should be provided!"),
-    INVALID_COMPANY_ERROR("The company should exist in the database!"),
-    INVALID_DATE_ERROR("The discontinued date should be later than the introduced date!"),
+    LACK_NAME_ERROR("The name should be provided!"), INVALID_COMPANY_ERROR(
+        "The company should exist in the database!"), INVALID_DATE_ERROR(
+            "The discontinued date should be later than the introduced date!"),
     // update() / delete() errors
     INVALID_ID_ERROR("The id doesn't exist in the database!");
 
@@ -60,24 +59,14 @@ public class ComputerDao implements Dao<Computer> {
   public static final String COMPANY_ID_COLUMN_NAME = "company_id";
 
   private static final String GET_QUERY =
-      "SELECT id, name, introduced, discontinued, company_id "
-          + "FROM computer WHERE id=?";
+      "SELECT id, name, introduced, discontinued, company_id " + "FROM computer WHERE id=?";
 
-  private static final String GET_ALL_QUERY = "SELECT "
-      + "c1.id as id, "
-      + "c1.name as name, "
-      + "introduced, "
-      + "discontinued, "
-      + "company_id, "
-      + "c2.name as company_name "
-      + "FROM computer c1 "
-      + "LEFT JOIN company c2 "
-      + "ON c1.company_id=c2.id";
+  private static final String GET_ALL_QUERY = "SELECT " + "c1.id as id, " + "c1.name as name, "
+      + "introduced, " + "discontinued, " + "company_id, " + "c2.name as company_name "
+      + "FROM computer c1 " + "LEFT JOIN company c2 " + "ON c1.company_id=c2.id";
 
-  private static final String SAVE_QUERY =
-      "INSERT INTO "
-          + "computer(id, name, introduced, discontinued, company_id) "
-          + "VALUES(?, ?, ?, ?, ?)";
+  private static final String SAVE_QUERY = "INSERT INTO "
+      + "computer(id, name, introduced, discontinued, company_id) " + "VALUES(?, ?, ?, ?, ?)";
 
   private static final String UPDATE_QUERY =
       "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
@@ -136,7 +125,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int save(Computer c) {
 
-    if (!checkSaveComputerValidity(c)) {
+    if (!ComputerValidator.checkSaveComputerValidity(c)) {
       return 0;
     }
 
@@ -145,11 +134,8 @@ public class ComputerDao implements Dao<Computer> {
 
       Optional<Company> companyOpt = c.getCompany();
 
-      return QUERY_RUNNER.update(connection, SAVE_QUERY,
-          null,
-          c.getName(),
-          c.getIntroduced().orElse(null),
-          c.getDiscontinued().orElse(null),
+      return QUERY_RUNNER.update(connection, SAVE_QUERY, null, c.getName(),
+          c.getIntroduced().orElse(null), c.getDiscontinued().orElse(null),
           companyOpt.isPresent() ? companyOpt.get().getId() : null);
     } catch (SQLException e) {
       logger.error(ComputerDaoErrors.SAVE_ERROR.getMessage(), e);
@@ -160,7 +146,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int update(Computer c) {
 
-    if (!checkUpdateComputerValidity(c)) {
+    if (!ComputerValidator.checkUpdateComputerValidity(c)) {
       return 0;
     }
 
@@ -168,12 +154,9 @@ public class ComputerDao implements Dao<Computer> {
 
       Optional<Company> companyOpt = c.getCompany();
 
-      int rowsAffected = QUERY_RUNNER.update(conneciton, UPDATE_QUERY,
-          c.getName(),
-          c.getIntroduced().orElse(null),
-          c.getDiscontinued().orElse(null),
-          companyOpt.isPresent() ? companyOpt.get().getId() : null,
-          c.getId());
+      int rowsAffected = QUERY_RUNNER.update(conneciton, UPDATE_QUERY, c.getName(),
+          c.getIntroduced().orElse(null), c.getDiscontinued().orElse(null),
+          companyOpt.isPresent() ? companyOpt.get().getId() : null, c.getId());
       return rowsAffected;
     } catch (SQLException e) {
       logger.error(ComputerDaoErrors.UPDATE_ERROR.getMessage(), e);
@@ -184,7 +167,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int delete(Computer c) {
 
-    if (!checkDeleteComputerValidity(c)) {
+    if (!ComputerValidator.checkDeleteComputerValidity(c)) {
       return 0;
     }
 
@@ -197,96 +180,4 @@ public class ComputerDao implements Dao<Computer> {
 
     return 0;
   }
-
-  /**
-   * Following are the methods to check argument validity for
-   * save(), update() & delete() method
-   */
-
-  private static boolean checkDatesValidity(Computer c) {
-
-    Optional<LocalDate> introducedOpt = c.getIntroduced();
-    Optional<LocalDate> discontinuedOpt = c.getDiscontinued();
-
-    if (introducedOpt.isPresent() && discontinuedOpt.isPresent()) {
-      LocalDate introduced = introducedOpt.get();
-      LocalDate discontinued = discontinuedOpt.get();
-
-      if (!discontinued.isAfter(introduced)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private static boolean checkIdValidity(Computer c) {
-    Optional<Computer> computerOpt = ComputerDao.getInstance().get(c.getId());
-    return computerOpt.isPresent();
-  }
-
-  private static boolean checkCompanyValidity(Computer c) {
-
-    Optional<Company> companyOpt = c.getCompany();
-    if (!companyOpt.isPresent()) {
-      return true;
-    }
-
-    long companyId = companyOpt.get().getId();
-
-    return CompanyDao.getInstance().get(companyId).isPresent();
-  }
-
-  private static boolean checkSaveComputerValidity(Computer c) {
-    if (!Objects.nonNull(c)) {
-      logger.error(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR.getMessage());
-      return false;
-    }
-
-    if (StringUtils.isEmpty(c.getName())) {
-      logger.error(ComputerDaoErrors.LACK_NAME_ERROR.getMessage());
-      return false;
-    }
-
-    if (!checkDatesValidity(c)) {
-      logger.error(ComputerDaoErrors.INVALID_DATE_ERROR.getMessage());
-      return false;
-    }
-
-    if (!checkCompanyValidity(c)) {
-      logger.error(ComputerDaoErrors.INVALID_COMPANY_ERROR.getMessage());
-      return false;
-    }
-
-    return true;
-  }
-
-  private static boolean checkUpdateComputerValidity(Computer c) {
-    if (!checkSaveComputerValidity(c)) {
-      return false;
-    }
-
-    if (!checkIdValidity(c)) {
-      logger.error(ComputerDaoErrors.INVALID_ID_ERROR.getMessage());
-      return false;
-    }
-
-    return true;
-  }
-
-  private static boolean checkDeleteComputerValidity(Computer c) {
-
-    if (!Objects.nonNull(c)) {
-      logger.error(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR.getMessage());
-      return false;
-    }
-
-    if (!checkIdValidity(c)) {
-      logger.error(ComputerDaoErrors.INVALID_ID_ERROR.getMessage());
-      return false;
-    }
-
-    return true;
-  }
-
 }

@@ -3,7 +3,7 @@ package com.excilys.cdb.services;
 import java.util.List;
 import java.util.Optional;
 import com.excilys.cdb.dto.CompanyDto;
-import com.excilys.cdb.dto.DtoBuilder;
+import com.excilys.cdb.dto.DtoManager;
 
 public class CompanyService {
 
@@ -18,10 +18,10 @@ public class CompanyService {
   }
 
   public Optional<CompanyDto> getCompanyDtoById(long id) {
-    return DtoBuilder.getCompanyDtoById(id);
+    return DtoManager.getCompanyDtoById(id);
   }
 
   public List<CompanyDto> getCompanyDtos() {
-    return DtoBuilder.getCompanyDtos();
+    return DtoManager.getCompanyDtos();
   }
 }
