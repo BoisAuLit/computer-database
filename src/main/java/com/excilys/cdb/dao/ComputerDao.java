@@ -26,18 +26,25 @@ public class ComputerDao implements Dao<Computer> {
 
   public enum ComputerDaoErrors {
     // General errors
-    GET_ERROR(GENERAL_ERROR_PREFIX + "getting computer by id!"), GET_ALL_ERROR(
-        GENERAL_ERROR_PREFIX + "getting all computers!"), SAVE_ERROR(
-            GENERAL_ERROR_PREFIX + "saving a computer!"), UPDATE_ERROR(
-                GENERAL_ERROR_PREFIX + "updating a computer!"), DELETE_ERROR(
-                    GENERAL_ERROR_PREFIX + "deleting a computer!"),
+    GET_ERROR(
+        GENERAL_ERROR_PREFIX + "getting computer by id!"),
+    GET_ALL_ERROR(
+        GENERAL_ERROR_PREFIX + "getting all computers!"),
+    SAVE_ERROR(
+        GENERAL_ERROR_PREFIX + "saving a computer!"),
+    UPDATE_ERROR(
+        GENERAL_ERROR_PREFIX + "updating a computer!"),
+    DELETE_ERROR(
+        GENERAL_ERROR_PREFIX + "deleting a computer!"),
 
     // save() / update() / delete() errors
     INVALID_COMPUTER_ARGUEMNT_ERROR("The arguemnt computer object cannot be null!"),
     // save() / update() errors
-    LACK_NAME_ERROR("The name should be provided!"), INVALID_COMPANY_ERROR(
-        "The company should exist in the database!"), INVALID_DATE_ERROR(
-            "The discontinued date should be later than the introduced date!"),
+    LACK_NAME_ERROR("The name should be provided!"),
+    INVALID_COMPANY_ERROR(
+        "The company should exist in the database!"),
+    INVALID_DATE_ERROR(
+        "The discontinued date should be later than the introduced date!"),
     // update() / delete() errors
     INVALID_ID_ERROR("The id doesn't exist in the database!");
 

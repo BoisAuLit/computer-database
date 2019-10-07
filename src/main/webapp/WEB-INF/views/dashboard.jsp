@@ -67,7 +67,6 @@
         </thead>
         <!-- Browse attribute computers -->
 
-
         <tbody id="results">
 
           <c:forEach var="computer" items="${ computers }">
