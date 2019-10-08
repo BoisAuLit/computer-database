@@ -48,7 +48,7 @@ public class DtoManager {
   }
 
   // List<Computer> -> List<ComputerDto>
-  private static List<ComputerDto> getComputerDtoList(List<Computer> computers) {
+  public static List<ComputerDto> getComputerDtoList(List<Computer> computers) {
 
     List<ComputerDto> computerDtos = new ArrayList<>();
 

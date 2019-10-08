@@ -7,7 +7,31 @@ public class ComputerPage {
   private int totalPages;
   // Numbe of all the computer that can be shown
   private int nbAllComptuers;
-  private List<ComputerDto> computers;
+  private List<ComputerDto> computerDtos;
+
+  private int beginPage;
+  private int endPage;
+
+  public void computeBeginEndPages() {
+    int currentTens = currentPage / 10;
+    boolean isCurrentFullTens = currentPage % 10 == 0;
+    int totalTens = totalPages / 10;
+    int residu = currentTens % 10;
+
+    if (isCurrentFullTens) {
+      beginPage = (currentTens - 1) * 10 + 1;
+    } else {
+      beginPage = currentTens * 10 + 1;
+      endPage = currentTens * 10 + 10;
+      return;
+    }
+
+    if (currentTens < totalTens) {
+      endPage = currentTens * 10 + 10;
+    } else {
+      endPage = currentTens * 10 + residu;
+    }
+  }
 
   public int getCurrentPage() {
     return currentPage;
@@ -33,11 +57,27 @@ public class ComputerPage {
     this.nbAllComptuers = nbAllComptuers;
   }
 
-  public List<ComputerDto> getComputers() {
-    return computers;
+  public List<ComputerDto> getComputerDtos() {
+    return computerDtos;
   }
 
-  public void setComputers(List<ComputerDto> computers) {
-    this.computers = computers;
+  public void setComputerDtos(List<ComputerDto> computerDtos) {
+    this.computerDtos = computerDtos;
+  }
+
+  public int getBeginPage() {
+    return beginPage;
+  }
+
+  public void setBeginPage(int beginPage) {
+    this.beginPage = beginPage;
+  }
+
+  public int getEndPage() {
+    return endPage;
+  }
+
+  public void setEndPage(int endPage) {
+    this.endPage = endPage;
   }
 }

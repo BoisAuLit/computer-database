@@ -10,12 +10,16 @@ import java.util.Optional;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.cdb.dao.mappers.ComputerHandler;
 import com.excilys.cdb.dao.validators.ComputerValidator;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
+import com.excilys.cdb.dto.ComputerDto;
+import com.excilys.cdb.dto.ComputerPage;
+import com.excilys.cdb.dto.DtoManager;
 import com.excilys.cdb.utils.ConnectionUtils;
 
 public class ComputerDao implements Dao<Computer> {
@@ -28,6 +32,10 @@ public class ComputerDao implements Dao<Computer> {
     // General errors
     GET_ERROR(
         GENERAL_ERROR_PREFIX + "getting computer by id!"),
+    COUNT_COMPUTERS_ERROR(
+        GENERAL_ERROR_PREFIX + "counting the number of all computers!"),
+    GET_PARTIAL_ERROR(
+        GENERAL_ERROR_PREFIX + "getting a page of computers!"),
     GET_ALL_ERROR(
         GENERAL_ERROR_PREFIX + "getting all computers!"),
     SAVE_ERROR(
@@ -66,14 +74,32 @@ public class ComputerDao implements Dao<Computer> {
   public static final String COMPANY_ID_COLUMN_NAME = "company_id";
 
   private static final String GET_QUERY =
-      "SELECT id, name, introduced, discontinued, company_id " + "FROM computer WHERE id=?";
+      "SELECT id, name, introduced, discontinued, company_id "
+          + "FROM computer WHERE id=?";
 
-  private static final String GET_ALL_QUERY = "SELECT " + "c1.id as id, " + "c1.name as name, "
-      + "introduced, " + "discontinued, " + "company_id, " + "c2.name as company_name "
-      + "FROM computer c1 " + "LEFT JOIN company c2 " + "ON c1.company_id=c2.id";
+  private static final String COUNT_COMPUTERS_QUERY =
+      "SELECT COUNT(id) AS nb_computers FROM computer";
 
-  private static final String SAVE_QUERY = "INSERT INTO "
-      + "computer(id, name, introduced, discontinued, company_id) " + "VALUES(?, ?, ?, ?, ?)";
+  private static final String GET_PARTIAL_QUERY =
+      "SELECT id, name, introduced, discontinued, company_id "
+          + "FROM computer LIMIT ? OFFSET ?";
+
+  private static final String GET_ALL_QUERY =
+      "SELECT "
+          + "c1.id as id, "
+          + "c1.name as name, "
+          + "introduced, "
+          + "discontinued, "
+          + "company_id, "
+          + "c2.name as company_name "
+          + "FROM computer c1 "
+          + "LEFT JOIN company c2 "
+          + "ON c1.company_id=c2.id";
+
+  private static final String SAVE_QUERY =
+      "INSERT INTO "
+          + "computer(id, name, introduced, discontinued, company_id) "
+          + "VALUES(?, ?, ?, ?, ?)";
 
   private static final String UPDATE_QUERY =
       "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
@@ -110,6 +136,61 @@ public class ComputerDao implements Dao<Computer> {
       logger.error(ComputerDaoErrors.GET_ERROR.getMessage(), e);
     }
     return Optional.empty();
+  }
+
+  // Count the number of all computers
+  public long countComputers() {
+    try (Connection connection = ConnectionUtils.getConnection()) {
+      long nbComputers =
+          QUERY_RUNNER.query(connection, COUNT_COMPUTERS_QUERY, new ScalarHandler<Long>());
+      return nbComputers;
+    } catch (SQLException e) {
+      logger.error(ComputerDaoErrors.COUNT_COMPUTERS_ERROR.getMessage(), e);
+    }
+    return 0;
+  }
+
+  // For pagination
+  public ComputerPage getPartial(int limit, int offset) {
+
+    ComputerPage computerPage = new ComputerPage();
+
+    int nbComputers = (int) countComputers();
+
+
+    List<Computer> computers = new ArrayList<>();
+    try (Connection connection = ConnectionUtils.getConnection()) {
+
+      List<Map<String, Object>> mapList =
+          QUERY_RUNNER.query(connection, GET_PARTIAL_QUERY, new MapListHandler(), limit, offset);
+
+      computers = ComputerHandler.convert(mapList);
+
+      List<ComputerDto> computerDtos = DtoManager.getComputerDtoList(computers);
+
+      int firstElementIndex = offset + 1;
+
+
+
+      int currentPage = firstElementIndex / limit + 1;
+      int totalPages;
+      if (nbComputers % 10 == 0) {
+        totalPages = nbComputers / 10;
+      } else {
+        totalPages = nbComputers / limit + 1;
+      }
+
+      computerPage.setCurrentPage(currentPage);
+      computerPage.setTotalPages(totalPages);
+      computerPage.setNbAllComptuers(nbComputers);
+      computerPage.setComputerDtos(computerDtos);
+      computerPage.computeBeginEndPages();
+
+      return computerPage;
+    } catch (SQLException e) {
+      logger.error(ComputerDaoErrors.GET_PARTIAL_ERROR.getMessage(), e);
+    }
+    return null;
   }
 
   @Override
