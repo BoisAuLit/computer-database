@@ -7,7 +7,9 @@ import com.excilys.cdb.dto.DtoManager;
 
 public class CompanyService {
 
-  private CompanyService() {}
+  private CompanyService() {
+
+  }
 
   private static class LazyHolder {
     private static final CompanyService INSTANCE = new CompanyService();

@@ -14,8 +14,7 @@ import com.excilys.cdb.domain.Computer;
 
 public class ComputerValidator {
 
-  private static Logger logger =
-      LoggerFactory.getLogger("com.excilys.cdb.dao.validators.ComputerValidator");
+  private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
 
   private static boolean checkDatesValidity(Computer c) {
 

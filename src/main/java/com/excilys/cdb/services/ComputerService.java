@@ -10,7 +10,9 @@ import com.excilys.cdb.dto.DtoManager;
 
 public class ComputerService {
 
-  private ComputerService() {}
+  private ComputerService() {
+
+  }
 
   private static class LazyHolder {
     private static final ComputerService INSTANCE = new ComputerService();

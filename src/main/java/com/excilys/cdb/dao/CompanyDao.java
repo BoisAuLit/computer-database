@@ -29,7 +29,9 @@ public class CompanyDao implements Dao<Company> {
   private static final String GET_ERROR = ERROR_MESSAGE_PREFIX + "getting compnay by id";
   private static final String GET_ALL_ERROR = ERROR_MESSAGE_PREFIX + "getting all companies";
 
-  private CompanyDao() {}
+  private CompanyDao() {
+
+  }
 
   private static class LazyHolder {
     private static final CompanyDao INSTNACE = new CompanyDao();

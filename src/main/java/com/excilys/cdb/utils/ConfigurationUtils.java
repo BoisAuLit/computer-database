@@ -52,7 +52,7 @@ public class ConfigurationUtils {
 
     File configFile = new File(
         ConfigurationUtils.class
-            .getClassLoader().getResource("database.properties").getFile());
+            .getClassLoader().getResource("application.properties").getFile());
 
     if (!configFile.exists()) {
       throw new ConfigurationException(
@@ -60,6 +60,7 @@ public class ConfigurationUtils {
     }
 
     Parameters params = new Parameters();
+
     FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
         new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
             .configure(params.properties().setFile(configFile));

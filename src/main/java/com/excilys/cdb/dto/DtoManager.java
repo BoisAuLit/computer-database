@@ -13,8 +13,8 @@ import com.excilys.cdb.domain.Computer;
 
 public class DtoManager {
 
-  private static long LONG_FIELD_ABSENT_SPECIFIER = -1L;
-  private static String STRING_FIELD_ABSENT_SPECIFIER = "";
+  private static final long LONG_FIELD_ABSENT_SPECIFIER = -1L;
+  private static final String STRING_FIELD_ABSENT_SPECIFIER = "";
 
   // Computer -> ComputerDto
   private static ComputerDto getComputerDto(Computer c) {
@@ -133,13 +133,11 @@ public class DtoManager {
 
 
     if (!StringUtils.isEmpty(introducedStr)) {
-      introducedStr = StringUtils.stripStart(introducedStr, "0");
       LocalDate introduced = LocalDate.parse(introducedStr, DateTimeFormatter.ISO_LOCAL_DATE);
       computer.setIntroduced(Optional.of(introduced));
     }
 
     if (!StringUtils.isEmpty(discontinuedStr)) {
-      discontinuedStr = StringUtils.stripStart(discontinuedStr, "0");
       LocalDate discontinued = LocalDate.parse(discontinuedStr, DateTimeFormatter.ISO_LOCAL_DATE);
       computer.setDiscontinued(Optional.of(discontinued));
     }

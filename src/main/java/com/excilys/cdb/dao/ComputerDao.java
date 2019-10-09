@@ -157,7 +157,6 @@ public class ComputerDao implements Dao<Computer> {
 
     int nbComputers = (int) countComputers();
 
-
     List<Computer> computers = new ArrayList<>();
     try (Connection connection = ConnectionUtils.getConnection()) {
 
@@ -168,23 +167,23 @@ public class ComputerDao implements Dao<Computer> {
 
       List<ComputerDto> computerDtos = DtoManager.getComputerDtoList(computers);
 
-      int firstElementIndex = offset + 1;
 
+      int currentPage = offset / limit + 1;
 
-
-      int currentPage = firstElementIndex / limit + 1;
       int totalPages;
-      if (nbComputers % 10 == 0) {
-        totalPages = nbComputers / 10;
+      if (nbComputers % limit == 0) {
+        totalPages = nbComputers / limit;
       } else {
         totalPages = nbComputers / limit + 1;
       }
 
       computerPage.setCurrentPage(currentPage);
       computerPage.setTotalPages(totalPages);
-      computerPage.setNbAllComptuers(nbComputers);
+      computerPage.setNbAllComputers(nbComputers);
       computerPage.setComputerDtos(computerDtos);
+      computerPage.setCurrentMaxElementsPerPage(limit);
       computerPage.computeBeginEndPages();
+
 
       return computerPage;
     } catch (SQLException e) {

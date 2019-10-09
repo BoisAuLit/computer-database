@@ -29,7 +29,7 @@
 
   <section id="main">
     <div class="container">
-      <h1 id="homeTitle">${ computers.size() }&nbsp;Computers&nbsp;found</h1>
+      <h1 id="homeTitle">${ page.nbAllComputers }&nbsp;Computers&nbsp;found</h1>
       <div id="actions" class="form-horizontal">
         <div class="pull-left">
           <form id="searchForm" action="#" method="GET"
@@ -70,12 +70,12 @@
 
         <tbody id="results">
 
-          <c:forEach var="computer" items="${ computers }">
+          <%--           <c:forEach var="computer" items="${ computers }"> --%>
+          <c:forEach var="computer" items="${ page.computerDtos }">
             <tr>
               <td>
                 <a href="edit-computer?id=${computer.id}">${ computer.name }</a>
               </td>
-
               <td>${ computer.introduced }</td>
               <td>${ computer.discontinued }</td>
               <td>${ computer.companyName }</td>
@@ -92,48 +92,73 @@
     <div class="container text-center">
       <ul class="pagination">
 
-        <li>
-          <a href="#">
-            <span>&laquo;</span>
-          </a>
-        </li>
+        <c:if test="${ page.beginPage ne 1 }">
+          <li>
+            <a
+              href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${(page.beginPage - 2) * page.currentMaxElementsPerPage}">
+              <span>&laquo;</span>
+            </a>
+          </li>
+        </c:if>
 
-        <li>
-          <a href="#">1</a>
-        </li>
-        <li>
-          <a href="#">2</a>
-        </li>
-        <li>
-          <a href="#">3</a>
-        </li>
-        <li>
-          <a href="#">4</a>
-        </li>
-        <li>
-          <a href="#">5</a>
-        </li>
 
-        <li>
-          <a href="#">
-            <span>&raquo;</span>
-          </a>
-        </li>
+
+        <c:forEach begin="${ page.beginPage }" end="${ page.endPage }"
+          varStatus="loop">
+
+          <c:if test="${ loop.index eq page.currentPage}">
+            <li class="active">
+              <a href="#">${loop.index}</a>
+            </li>
+          </c:if>
+
+          <c:if test="${ loop.index ne page.currentPage}">
+
+            <li>
+              <a
+                href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${ (loop.index - 1) * page.currentMaxElementsPerPage  }">
+                ${loop.index} </a>
+            </li>
+          </c:if>
+
+        </c:forEach>
+
+        <c:if test="${ page.totalPages gt page.endPage }">
+          <li>
+            <a
+              href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${page.endPage * page.currentMaxElementsPerPage}">
+              <span>&raquo;</span>
+            </a>
+          </li>
+        </c:if>
 
       </ul>
-    </div>
 
-    <div class="btn-group btn-group-sm pull-right" role="group">
-      <button type="button" class="btn btn-default">10</button>
-      <button type="button" class="btn btn-default">50</button>
-      <button type="button" class="btn btn-default">100</button>
-    </div>
 
+      <div class="btn-group btn-group-sm pull-right" role="group">
+        <c:forEach var="nbElements"
+          items="${ page.maxElementsPerPages }">
+
+          <c:if test="${ page.currentMaxElementsPerPage eq  nbElements}">
+            <button type="button" class="btn btn-default active">${ nbElements }</button>
+          </c:if>
+
+          <c:if test="${ page.currentMaxElementsPerPage ne  nbElements}">
+            <button type="button" class="btn btn-default"
+              onclick="changeSize('${nbElements}')">${ nbElements }
+            </button>
+          </c:if>
+
+        </c:forEach>
+      </div>
+
+    </div>
   </footer>
 
   <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+  <script src="${pageContext.request.contextPath}/js/change_size.js"></script>
 
 </body>
 </html>

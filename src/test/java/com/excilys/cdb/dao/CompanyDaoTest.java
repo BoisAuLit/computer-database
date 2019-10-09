@@ -43,7 +43,6 @@ public class CompanyDaoTest {
     /* Get a company that exists in the database. */
     // Given
 
-    // When
     Optional<Company> companyOpt = COMPANY_DAO.get(1);
     // Then
     assertTrue(companyOpt.isPresent());
