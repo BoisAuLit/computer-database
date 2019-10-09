@@ -32,14 +32,18 @@
       <h1 id="homeTitle">${ page.nbAllComputers }&nbsp;Computers&nbsp;found</h1>
       <div id="actions" class="form-horizontal">
         <div class="pull-left">
-          <form id="searchForm" action="#" method="GET"
+
+          <!--  -->
+          <form id="searchForm" action="search()" method="GET"
             class="form-inline">
 
             <input type="search" id="searchbox" name="search"
-              class="form-control" placeholder="Search name" />
+              class="form-control" placeholder="Search name"
+              value="${ nameToFind }" />
             <input type="submit" id="searchsubmit"
               value="Filter by name" class="btn btn-primary" />
           </form>
+
         </div>
         <div class="pull-right">
           <a class="btn btn-success" id="addComputer" href="addComputer">Add
@@ -115,9 +119,14 @@
           <c:if test="${ loop.index ne page.currentPage}">
 
             <li>
-              <a
-                href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${ (loop.index - 1) * page.currentMaxElementsPerPage  }">
+              <a href="#"
+                onclick="changePage('${ page.currentMaxElementsPerPage }', 
+                '${ (loop.index - 1) * page.currentMaxElementsPerPage  }')">
                 ${loop.index} </a>
+
+              <!--               <a -->
+              <%--                 href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${ (loop.index - 1) * page.currentMaxElementsPerPage  }"> --%>
+              <%--                 ${loop.index} </a> --%>
             </li>
           </c:if>
 
@@ -125,10 +134,17 @@
 
         <c:if test="${ page.totalPages gt page.endPage }">
           <li>
-            <a
-              href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${page.endPage * page.currentMaxElementsPerPage}">
+            <a href="#"
+              onclick="changePage('${ page.currentMaxElementsPerPage }', 
+                '${page.endPage * page.currentMaxElementsPerPage}')">
               <span>&raquo;</span>
             </a>
+
+            <!--             <a -->
+            <%--               href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${page.endPage * page.currentMaxElementsPerPage}"> --%>
+            <!--               <span>&raquo;</span> -->
+            <!--             </a> -->
+
           </li>
         </c:if>
 
@@ -158,7 +174,7 @@
   <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
-  <script src="${pageContext.request.contextPath}/js/change_size.js"></script>
+  <script src="${pageContext.request.contextPath}/js/change_page.js"></script>
 
 </body>
 </html>

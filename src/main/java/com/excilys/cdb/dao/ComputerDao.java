@@ -80,9 +80,15 @@ public class ComputerDao implements Dao<Computer> {
   private static final String COUNT_COMPUTERS_QUERY =
       "SELECT COUNT(id) AS nb_computers FROM computer";
 
-  private static final String GET_PARTIAL_QUERY =
+  private static final String GET_PARTIAL_QUERY_PREFIX =
       "SELECT id, name, introduced, discontinued, company_id "
-          + "FROM computer LIMIT ? OFFSET ?";
+          + "FROM computer WHERE name LIKE '%";
+
+  private static final String GET_PARTIAL_QUERY_SUFFIX = "%' LIMIT ? OFFSET ?";
+
+  // private static final String GET_PARTIAL_QUERY =
+  // "SELECT id, name, introduced, discontinued, company_id "
+  // + "FROM computer WHERE name LIKE ? LIMIT ? OFFSET ?";
 
   private static final String GET_ALL_QUERY =
       "SELECT "
@@ -121,6 +127,14 @@ public class ComputerDao implements Dao<Computer> {
     return LazyHolder.INSTANCE;
   }
 
+  private String getCountQuery(String nameToFind) {
+    return COUNT_COMPUTERS_QUERY + " WHERE name like '%" + nameToFind + "%'";
+  }
+
+  private String getPartialQuery(String nameToFind) {
+    return GET_PARTIAL_QUERY_PREFIX + nameToFind + GET_PARTIAL_QUERY_SUFFIX;
+  }
+
   @Override
   public Optional<Computer> get(long id) {
     try (Connection connection = ConnectionUtils.getConnection()) {
@@ -139,10 +153,10 @@ public class ComputerDao implements Dao<Computer> {
   }
 
   // Count the number of all computers
-  public long countComputers() {
+  public long countComputers(String nameToFind) {
     try (Connection connection = ConnectionUtils.getConnection()) {
       long nbComputers =
-          QUERY_RUNNER.query(connection, COUNT_COMPUTERS_QUERY, new ScalarHandler<Long>());
+          QUERY_RUNNER.query(connection, getCountQuery(nameToFind), new ScalarHandler<Long>());
       return nbComputers;
     } catch (SQLException e) {
       logger.error(ComputerDaoErrors.COUNT_COMPUTERS_ERROR.getMessage(), e);
@@ -151,17 +165,17 @@ public class ComputerDao implements Dao<Computer> {
   }
 
   // For pagination
-  public ComputerPage getPartial(int limit, int offset) {
+  public ComputerPage getPartial(String nameToFind, int limit, int offset) {
 
     ComputerPage computerPage = new ComputerPage();
 
-    int nbComputers = (int) countComputers();
+    int nbComputers = (int) countComputers(nameToFind);
 
     List<Computer> computers = new ArrayList<>();
     try (Connection connection = ConnectionUtils.getConnection()) {
-
       List<Map<String, Object>> mapList =
-          QUERY_RUNNER.query(connection, GET_PARTIAL_QUERY, new MapListHandler(), limit, offset);
+          QUERY_RUNNER.query(connection, getPartialQuery(nameToFind), new MapListHandler(), limit,
+              offset);
 
       computers = ComputerHandler.convert(mapList);
 

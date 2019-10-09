@@ -38,10 +38,10 @@ public class ComputerService {
 
   public ComputerPage getDefaultComputerPage() {
     // Todo, get all these from configuration file
-    return ComputerDao.getInstance().getPartial(10, 0);
+    return ComputerDao.getInstance().getPartial("", 10, 0);
   }
 
-  public ComputerPage getComputerPage(int limit, int offset) {
-    return ComputerDao.getInstance().getPartial(limit, offset);
+  public ComputerPage getComputerPage(String nameToFind, int limit, int offset) {
+    return ComputerDao.getInstance().getPartial(nameToFind, limit, offset);
   }
 }
