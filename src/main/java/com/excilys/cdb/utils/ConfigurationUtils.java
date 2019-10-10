@@ -10,6 +10,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class ConfigurationUtils {
 
   static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ConfigurationUtils");

@@ -11,7 +11,6 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.cdb.domain.Company;
-import com.excilys.cdb.utils.ConnectionUtils;
 
 public class CompanyDao implements Dao<Company> {
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.CompanyDao");
@@ -43,7 +42,7 @@ public class CompanyDao implements Dao<Company> {
 
   @Override
   public Optional<Company> get(long id) {
-    try (Connection connection = ConnectionUtils.getConnection();) {
+    try (Connection connection = DataSource.getConnection();) {
       Company company = QUERY_RUNNER.query(connection, GET_QUERY, COMPANY_HANDLER, id);
       return Optional.ofNullable(company);
     } catch (SQLException e) {
@@ -55,7 +54,7 @@ public class CompanyDao implements Dao<Company> {
   @Override
   public List<Company> getAll() {
     List<Company> companies = new ArrayList<>();
-    try (Connection connection = ConnectionUtils.getConnection();) {
+    try (Connection connection = DataSource.getConnection();) {
       companies = QUERY_RUNNER.query(connection, GET_ALL_QUERY, COMPANY_LIST_HANDLER);
       return companies;
     } catch (SQLException e) {

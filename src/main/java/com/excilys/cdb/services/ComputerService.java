@@ -35,6 +35,11 @@ public class ComputerService {
     return ComputerDao.getInstance().update(computer);
   }
 
+  public int saveComputer(ComputerDto computerDto) {
+    Computer computer = DtoManager.getComputer(computerDto);
+    return ComputerDao.getInstance().save(computer);
+  }
+
 
   public ComputerPage getDefaultComputerPage() {
     // Todo, get all these from configuration file

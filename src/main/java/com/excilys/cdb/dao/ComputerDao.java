@@ -2,6 +2,10 @@ package com.excilys.cdb.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +24,6 @@ import com.excilys.cdb.domain.Computer;
 import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.dto.ComputerPage;
 import com.excilys.cdb.dto.DtoManager;
-import com.excilys.cdb.utils.ConnectionUtils;
 
 public class ComputerDao implements Dao<Computer> {
 
@@ -137,7 +140,7 @@ public class ComputerDao implements Dao<Computer> {
 
   @Override
   public Optional<Computer> get(long id) {
-    try (Connection connection = ConnectionUtils.getConnection()) {
+    try (Connection connection = DataSource.getConnection()) {
 
       Map<String, Object> map = QUERY_RUNNER.query(connection, GET_QUERY, new MapHandler(), id);
       if (Objects.nonNull(map)) {
@@ -154,7 +157,7 @@ public class ComputerDao implements Dao<Computer> {
 
   // Count the number of all computers
   public long countComputers(String nameToFind) {
-    try (Connection connection = ConnectionUtils.getConnection()) {
+    try (Connection connection = DataSource.getConnection()) {
       long nbComputers =
           QUERY_RUNNER.query(connection, getCountQuery(nameToFind), new ScalarHandler<Long>());
       return nbComputers;
@@ -172,7 +175,7 @@ public class ComputerDao implements Dao<Computer> {
     int nbComputers = (int) countComputers(nameToFind);
 
     List<Computer> computers = new ArrayList<>();
-    try (Connection connection = ConnectionUtils.getConnection()) {
+    try (Connection connection = DataSource.getConnection()) {
       List<Map<String, Object>> mapList =
           QUERY_RUNNER.query(connection, getPartialQuery(nameToFind), new MapListHandler(), limit,
               offset);
@@ -208,9 +211,10 @@ public class ComputerDao implements Dao<Computer> {
 
   @Override
   public List<Computer> getAll() {
+
     List<Computer> computers = new ArrayList<>();
 
-    try (Connection connection = ConnectionUtils.getConnection()) {
+    try (Connection connection = DataSource.getConnection()) {
 
       List<Map<String, Object>> mapList =
           QUERY_RUNNER.query(connection, GET_ALL_QUERY, new MapListHandler());
@@ -221,6 +225,20 @@ public class ComputerDao implements Dao<Computer> {
       logger.error(ComputerDaoErrors.GET_ALL_ERROR.getMessage(), e);
     }
     return computers;
+
+    // List<Computer> computers = new ArrayList<>();
+    //
+    // try (Connection connection = DataSource.getConnection()) {
+    //
+    // List<Map<String, Object>> mapList =
+    // QUERY_RUNNER.query(connection, GET_ALL_QUERY, new MapListHandler());
+    // computers = ComputerHandler.convert(mapList);
+    //
+    // return computers;
+    // } catch (SQLException e) {
+    // logger.error(ComputerDaoErrors.GET_ALL_ERROR.getMessage(), e);
+    // }
+    // return computers;
   }
 
   @Override
@@ -231,7 +249,7 @@ public class ComputerDao implements Dao<Computer> {
     }
 
     /* We won't use the id of the compnay object passed as argument, we will use auto-increment */
-    try (Connection connection = ConnectionUtils.getConnection()) {
+    try (Connection connection = DataSource.getConnection()) {
 
       Optional<Company> companyOpt = c.getCompany();
 
@@ -251,13 +269,36 @@ public class ComputerDao implements Dao<Computer> {
       return 0;
     }
 
-    try (Connection conneciton = ConnectionUtils.getConnection()) {
-
+    try (Connection connection = DataSource.getConnection()) {
       Optional<Company> companyOpt = c.getCompany();
+      Optional<LocalDate> introducedOpt = c.getIntroduced();
+      Optional<LocalDate> discontinuedOpt = c.getDiscontinued();
 
-      int rowsAffected = QUERY_RUNNER.update(conneciton, UPDATE_QUERY, c.getName(),
-          c.getIntroduced().orElse(null), c.getDiscontinued().orElse(null),
+      Object introduced = null;
+      if (introducedOpt.isPresent()) {
+        LocalDate ld = introducedOpt.get();
+        ZonedDateTime zdt = ld.atStartOfDay(ZoneId.of("Europe/Paris"));
+        Timestamp ts = Timestamp.from(zdt.toInstant());
+        introduced = ts;
+      }
+
+      Object discontinued = null;
+      if (discontinuedOpt.isPresent()) {
+        LocalDate ld = discontinuedOpt.get();
+        ZonedDateTime zdt = ld.atStartOfDay(ZoneId.of("Europe/Paris"));
+        Timestamp ts = Timestamp.from(zdt.toInstant());
+        discontinued = ts;
+      }
+
+      int rowsAffected = QUERY_RUNNER.update(connection, UPDATE_QUERY, c.getName(),
+          introduced, discontinued,
           companyOpt.isPresent() ? companyOpt.get().getId() : null, c.getId());
+
+
+
+      // int rowsAffected = QUERY_RUNNER.update(connection, UPDATE_QUERY, c.getName(),
+      // c.getIntroduced().orElse(null), c.getDiscontinued().orElse(null),
+      // companyOpt.isPresent() ? companyOpt.get().getId() : null, c.getId());
       return rowsAffected;
     } catch (SQLException e) {
       logger.error(ComputerDaoErrors.UPDATE_ERROR.getMessage(), e);
@@ -272,7 +313,7 @@ public class ComputerDao implements Dao<Computer> {
       return 0;
     }
 
-    try (Connection connection = ConnectionUtils.getConnection()) {
+    try (Connection connection = DataSource.getConnection()) {
       int rowsAffected = QUERY_RUNNER.update(connection, DELETE_QUERY, c.getId());
       return rowsAffected;
     } catch (SQLException e) {

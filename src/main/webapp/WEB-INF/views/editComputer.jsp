@@ -66,6 +66,7 @@
               <!-- Company information field -->
               <div class="form-group">
                 <label for="companyId">Company</label>
+
                 <select class="form-control" id="companyId"
                   name="companyId">
 
@@ -83,12 +84,14 @@
 
                   </c:forEach>
                 </select>
+
               </div>
             </fieldset>
             <div class="actions pull-right">
               <input type="submit" value="Confirm"
                 class="btn btn-primary">
-              or <a href="dashboard" class="btn btn-default">Cancel</a>
+              or
+              <a href="dashboard" class="btn btn-default">Cancel</a>
             </div>
           </form>
         </div>
@@ -101,6 +104,7 @@
     src="${pageContext.request.contextPath}/js/jquery.redirect.min.js"></script>
   <script
     src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
+  <script src="${pageContext.request.contextPath}/js/edit_computer.js"></script>
 
 
 

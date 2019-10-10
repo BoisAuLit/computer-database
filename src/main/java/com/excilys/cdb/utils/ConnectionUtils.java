@@ -54,7 +54,7 @@ public class ConnectionUtils {
       Class.forName(H2_DRIVER_NAME).newInstance();
 
     } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-      logger.error("Error loading JDBC driver!", e);
+      logger.error("Error loading database driver!", e);
       System.exit(1);
     }
   }

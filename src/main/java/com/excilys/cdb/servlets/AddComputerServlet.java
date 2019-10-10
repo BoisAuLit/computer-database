@@ -3,7 +3,6 @@ package com.excilys.cdb.servlets;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,29 +15,26 @@ import com.excilys.cdb.services.ComputerService;
 import com.google.gson.Gson;
 
 /**
- * Servlet implementation class EditComputer
+ * Servlet implementation class AddComputerServlet
  */
-@WebServlet("/edit-computer")
-public class EditComputerServlet extends HttpServlet {
+@WebServlet("/add-computer")
+public class AddComputerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    long id = Long.parseLong(request.getParameter("id"));
-    Optional<ComputerDto> computerDtoOpt = ComputerService.getInstance().getComputerDtoById(id);
-    request.setAttribute("computerDto", computerDtoOpt.get());
-
     List<CompanyDto> companyDtos = CompanyService.getInstance().getCompanyDtos();
     request.setAttribute("companyDtos", companyDtos);
 
-    this.getServletContext().getRequestDispatcher("/WEB-INF/views/editComputer.jsp")
-        .forward(request, response);
+    this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(
+        request,
+        response);
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     Gson gson = new Gson();
@@ -53,12 +49,11 @@ public class EditComputerServlet extends HttpServlet {
     }
 
     ComputerDto computerDto = gson.fromJson(sb.toString(), ComputerDto.class);
-    int rowsAffected = ComputerService.getInstance().updateComputer(computerDto);
+    int rowsAffected = ComputerService.getInstance().saveComputer(computerDto);
     if (rowsAffected == 1) {
       response.setStatus(200);
     } else {
       response.sendError(500);
     }
   }
-
 }

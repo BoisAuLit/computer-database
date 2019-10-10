@@ -46,8 +46,8 @@
 
         </div>
         <div class="pull-right">
-          <a class="btn btn-success" id="addComputer" href="addComputer">Add
-            Computer</a>
+          <a class="btn btn-success" id="addComputer"
+            href="add-computer">Add Computer</a>
           <a class="btn btn-default" id="editComputer" href="#"
             onclick="$.fn.toggleEditMode();">Edit</a>
         </div>
@@ -174,7 +174,10 @@
   <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
-  <script src="${pageContext.request.contextPath}/js/change_page.js"></script>
+  <script
+    src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
+  <script
+    src="${pageContext.request.contextPath}/js/dashboard_change_page.js"></script>
 
 </body>
 </html>
