@@ -106,15 +106,5 @@
     src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
   <script src="${pageContext.request.contextPath}/js/edit_computer.js"></script>
 
-
-
-  <h1>id: ${ computerDto.id }</h1>
-  <h1>name: ${ computerDto.name }</h1>
-  <h1>introduced: ${ computerDto.introduced }</h1>
-  <h1>discontinued: ${ computerDto.discontinued }</h1>
-  <h1>companyId: ${ computerDto.companyId }</h1>
-
-
-
 </body>
 </html>

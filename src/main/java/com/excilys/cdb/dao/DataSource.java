@@ -30,6 +30,9 @@ public class DataSource {
   private static final String DATABASE_TYPE_KEY = "dbType";
   private static final String MYSQL_DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
 
+  private static String connectionQuery;
+
+
   private static final String H2_DRIVER_NAME = "org.h2.Driver";
   private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
 
