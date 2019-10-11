@@ -35,6 +35,9 @@ public class DataSource {
 
   private static final String H2_DRIVER_NAME = "org.h2.Driver";
   private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
+  // private static final String H2_CONNECTION_QUERY = "jdbc:h2:mem/test";
+  // private static final String H2_CONNECTION_QUERY = "jdbc:h2:tcp://localhost//data/test";
+  // private static final String H2_CONNECTION_QUERY = "jdbc:h2:tcp://localhost/~/test";
 
   private static final String CONNECTION_QUERY_TEMPLATE =
       String.format("jdbc:${%s}://localhost:3306/"
@@ -89,7 +92,6 @@ public class DataSource {
   private DataSource() {
 
   }
-
 
   public static Connection getConnection() throws SQLException {
     if (Objects.nonNull(System.getProperty("test"))) {

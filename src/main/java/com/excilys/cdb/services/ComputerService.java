@@ -40,7 +40,14 @@ public class ComputerService {
     return ComputerDao.getInstance().save(computer);
   }
 
+  public boolean batchDeleteComputer(List<String> ids) {
+    int rowsAffected = ComputerDao.getInstance().batchDelete(ids);
+    return rowsAffected > 0;
+  }
 
+  /**
+   * The following methods are about pagination
+   */
   public ComputerPage getDefaultComputerPage() {
     // Todo, get all these from configuration file
     return ComputerDao.getInstance().getPartial("", 10, 0);

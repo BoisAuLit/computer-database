@@ -47,6 +47,9 @@ public class ComputerDao implements Dao<Computer> {
         GENERAL_ERROR_PREFIX + "updating a computer!"),
     DELETE_ERROR(
         GENERAL_ERROR_PREFIX + "deleting a computer!"),
+    DELETE_ALL_ERROR(
+        GENERAL_ERROR_PREFIX + "deleting a list of computer!"),
+
 
     // save() / update() / delete() errors
     INVALID_COMPUTER_ARGUEMNT_ERROR("The arguemnt computer object cannot be null!"),
@@ -114,6 +117,8 @@ public class ComputerDao implements Dao<Computer> {
       "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 
   private static final String DELETE_QUERY = "DELETE FROM computer WHERE id=?";
+
+  private static final String DELETE_ALL_QUERY_PREFIX = "DELETE FROM computer WHERE id IN ";
 
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
@@ -322,4 +327,24 @@ public class ComputerDao implements Dao<Computer> {
 
     return 0;
   }
+
+  private static String composeDeleteAlQuery(List<String> ids) {
+    return DELETE_ALL_QUERY_PREFIX + "(" +
+        String.join(",", ids)
+        + ")";
+
+  }
+
+  public int batchDelete(List<String> ids) {
+
+    try (Connection connection = DataSource.getConnection()) {
+      int rowsAffected = QUERY_RUNNER.update(connection, composeDeleteAlQuery(ids));
+      return rowsAffected;
+    } catch (SQLException e) {
+      logger.error(ComputerDaoErrors.DELETE_ALL_ERROR.getMessage(), e);
+    }
+
+    return 0;
+  }
+
 }
