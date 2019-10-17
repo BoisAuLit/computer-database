@@ -34,7 +34,9 @@ public class DataSource {
 
 
   private static final String H2_DRIVER_NAME = "org.h2.Driver";
-  private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
+  // private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
+  private static final String H2_CONNECTION_QUERY =
+      "jdbc:h2:file:./Database;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:mem/test";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:tcp://localhost//data/test";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:tcp://localhost/~/test";
