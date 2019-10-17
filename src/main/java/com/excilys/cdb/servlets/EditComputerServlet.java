@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.excilys.cdb.dto.CompanyDto;
@@ -26,13 +27,10 @@ import com.google.gson.Gson;
 public class EditComputerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  @Autowired
   private ComputerService computerService;
+  @Autowired
   private CompanyService companyService;
-
-  public EditComputerServlet(ComputerService computerService, CompanyService companyService) {
-    this.computerService = computerService;
-    this.companyService = companyService;
-  }
 
   @Override
   public void init(ServletConfig config) throws ServletException {

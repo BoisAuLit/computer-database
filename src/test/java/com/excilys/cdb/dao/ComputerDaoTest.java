@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.excilys.cdb.dao.ComputerDao.ComputerDaoErrors;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
@@ -27,7 +28,6 @@ import ch.qos.logback.core.read.ListAppender;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class ComputerDaoTest {
-  private static final ComputerDao COMPUTER_DAO = ComputerDao.getInstance();
 
   /**
    * Testing loggers
@@ -45,10 +45,9 @@ public class ComputerDaoTest {
   private static final Computer NULL_COMPUTER_REFERENCE = null;
 
   /**
-   * Test the following errors for save() & udpate methods.
-   * 1. Error happens when name is null or empty.
-   * 2. Error happens when discontinued date is earlier than the introduced date.
-   * 3. Error happens when the compnay id does not exist in the database.
+   * Test the following errors for save() & udpate methods. 1. Error happens when name is null or
+   * empty. 2. Error happens when discontinued date is earlier than the introduced date. 3. Error
+   * happens when the compnay id does not exist in the database.
    */
   private static final Computer COMPUTER_WITHOUT_NAME;
   private static final Computer COMPUTER_INVALID_DATE;
@@ -69,6 +68,10 @@ public class ComputerDaoTest {
 
   private static final Object[][] TEST_DATA;
 
+  @Autowired
+  private ComputerDao computerDao;
+
+
   private static Computer parseComputer(Object[] a) {
     Computer c = new Computer();
 
@@ -88,8 +91,7 @@ public class ComputerDaoTest {
   static {
 
     /**
-     * Order:
-     * id, name, introduced date, discontinued date, company.
+     * Order: id, name, introduced date, discontinued date, company.
      */
     TEST_DATA = new Object[][] {
         {
@@ -195,7 +197,7 @@ public class ComputerDaoTest {
     /* Get a compmuter that exists in the database. */
     // Given
     // When
-    Optional<Computer> computerOpt = COMPUTER_DAO.get(VALID_COMPUTER_ID);
+    Optional<Computer> computerOpt = computerDao.get(VALID_COMPUTER_ID);
     assertTrue(computerOpt.isPresent());
     Computer computer = computerOpt.get();
     // Then
@@ -208,7 +210,7 @@ public class ComputerDaoTest {
     /* Get a compmuter that doesn't not exist in the database. */
     // Given
     // When
-    Optional<Computer> computer = COMPUTER_DAO.get(INVALID_COMPUTER_ID);
+    Optional<Computer> computer = computerDao.get(INVALID_COMPUTER_ID);
     // Then
     assertFalse(computer.isPresent());
   }
@@ -220,7 +222,7 @@ public class ComputerDaoTest {
     // Given
 
     // When
-    List<Computer> computers = COMPUTER_DAO.getAll();
+    List<Computer> computers = computerDao.getAll();
     Computer computer = null;
     for (Computer com : computers) {
       if (com.getId() == VALID_COMPUTER_ID) {
@@ -238,13 +240,13 @@ public class ComputerDaoTest {
   @Order(4)
   public void testSaveNullReference() {
     /**
-     * Test when a null reference is passed to the save() method.
-     * Expect the affected rows in the database to be 0.
+     * Test when a null reference is passed to the save() method. Expect the affected rows in the
+     * database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.save(NULL_COMPUTER_REFERENCE);
+    int rowsAffected = computerDao.save(NULL_COMPUTER_REFERENCE);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR);
     assertEquals(0, rowsAffected);
@@ -254,13 +256,13 @@ public class ComputerDaoTest {
   @Order(5)
   public void testSaveEmptyName() {
     /**
-     * Test when no name is provided when we want to save a computer.
-     * Expect the affected rows in the database to be 0.
+     * Test when no name is provided when we want to save a computer. Expect the affected rows in
+     * the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.save(COMPUTER_WITHOUT_NAME);
+    int rowsAffected = computerDao.save(COMPUTER_WITHOUT_NAME);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.LACK_NAME_ERROR);
     assertEquals(0, rowsAffected);
@@ -270,13 +272,13 @@ public class ComputerDaoTest {
   @Order(6)
   public void testSaveInvalidDates() {
     /**
-     * Test when 'date discontinued' is not later than 'date introduced'.
-     * Expect the affected rows in the database to be 0.
+     * Test when 'date discontinued' is not later than 'date introduced'. Expect the affected rows
+     * in the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.save(COMPUTER_INVALID_DATE);
+    int rowsAffected = computerDao.save(COMPUTER_INVALID_DATE);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_DATE_ERROR);
     assertEquals(0, rowsAffected);
@@ -286,13 +288,13 @@ public class ComputerDaoTest {
   @Order(7)
   public void testSaveInvalidCompany() {
     /**
-     * Test when the company_id of the computer to save is not valid.
-     * Expect the affected rows in the database to be 0.
+     * Test when the company_id of the computer to save is not valid. Expect the affected rows in
+     * the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.save(COMPUTER_INVALID_COMPANY);
+    int rowsAffected = computerDao.save(COMPUTER_INVALID_COMPANY);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_COMPANY_ERROR);
     assertEquals(0, rowsAffected);
@@ -302,14 +304,13 @@ public class ComputerDaoTest {
   @Order(8)
   public void testSavaSuccess() {
     /**
-     * Test saving with a valid company.
-     * Expect the affected rows in the database to be 1.
+     * Test saving with a valid company. Expect the affected rows in the database to be 1.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.save(VALID_COMPUTER_TO_SAVE);
-    Optional<Computer> computerOpt = COMPUTER_DAO.get(VALID_COMPUTER_TO_SAVE_ID);
+    int rowsAffected = computerDao.save(VALID_COMPUTER_TO_SAVE);
+    Optional<Computer> computerOpt = computerDao.get(VALID_COMPUTER_TO_SAVE_ID);
     // Then
     assertEquals(1, rowsAffected);
     assertTrue(computerOpt.isPresent());
@@ -320,11 +321,11 @@ public class ComputerDaoTest {
   @Order(9)
   public void testUpdateNullReference() {
     /**
-     * Test when a null reference is passed to the update() method.
-     * Expect the affected rows in the database to be 0.
+     * Test when a null reference is passed to the update() method. Expect the affected rows in the
+     * database to be 0.
      */
     // Given
-    int rowsAffected = COMPUTER_DAO.save(NULL_COMPUTER_REFERENCE);
+    int rowsAffected = computerDao.save(NULL_COMPUTER_REFERENCE);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR);
     assertEquals(0, rowsAffected);
@@ -334,13 +335,13 @@ public class ComputerDaoTest {
   @Order(10)
   public void testUpdateEmptyName() {
     /**
-     * Test when no name is provided when we want to update a computer.
-     * Expect the affected rows in the database to be 0.
+     * Test when no name is provided when we want to update a computer. Expect the affected rows in
+     * the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.update(COMPUTER_WITHOUT_NAME);
+    int rowsAffected = computerDao.update(COMPUTER_WITHOUT_NAME);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.LACK_NAME_ERROR);
     assertEquals(0, rowsAffected);
@@ -350,13 +351,13 @@ public class ComputerDaoTest {
   @Order(11)
   public void testUpdateInvalidDates() {
     /**
-     * Test when 'date discontinued' is not later than 'date introduced'.
-     * Expect the affected rows in the database to be 0.
+     * Test when 'date discontinued' is not later than 'date introduced'. Expect the affected rows
+     * in the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.update(COMPUTER_INVALID_DATE);
+    int rowsAffected = computerDao.update(COMPUTER_INVALID_DATE);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_DATE_ERROR);
     assertEquals(0, rowsAffected);
@@ -366,13 +367,13 @@ public class ComputerDaoTest {
   @Order(12)
   public void testUpdateInvalidCompany() {
     /**
-     * Test when the company_id of the computer to update is not valid.
-     * Expect the affected rows in the database to be 0.
+     * Test when the company_id of the computer to update is not valid. Expect the affected rows in
+     * the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.update(COMPUTER_INVALID_COMPANY);
+    int rowsAffected = computerDao.update(COMPUTER_INVALID_COMPANY);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_COMPANY_ERROR);
     assertEquals(0, rowsAffected);
@@ -382,13 +383,13 @@ public class ComputerDaoTest {
   @Order(13)
   public void testUpdateInvalidId() {
     /**
-     * Test when the id of the computer to update in the database is invalid.
-     * Expect the affected rows in the database to be 0.
+     * Test when the id of the computer to update in the database is invalid. Expect the affected
+     * rows in the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.update(COMPUTER_INVALID_ID);
+    int rowsAffected = computerDao.update(COMPUTER_INVALID_ID);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_ID_ERROR);
     assertEquals(0, rowsAffected);
@@ -398,14 +399,14 @@ public class ComputerDaoTest {
   @Order(14)
   public void testUpdateSuccess() {
     /**
-     * Test update a valid computer in the database.
-     * Expect the affected rows in the database to be 1.
+     * Test update a valid computer in the database. Expect the affected rows in the database to be
+     * 1.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.update(VALID_COMPUTER_TO_UPDATE);
-    Optional<Computer> computerOpt = COMPUTER_DAO.get(VALID_COMPUTER_TO_UPDATE_ID);
+    int rowsAffected = computerDao.update(VALID_COMPUTER_TO_UPDATE);
+    Optional<Computer> computerOpt = computerDao.get(VALID_COMPUTER_TO_UPDATE_ID);
     // Then
     assertEquals(1, rowsAffected);
     assertTrue(computerOpt.isPresent());
@@ -416,13 +417,13 @@ public class ComputerDaoTest {
   @Order(15)
   public void testDeleteNullReferenec() {
     /**
-     * Test when a null reference is passed to the delete() method.
-     * Expect the affected rows in the database to be 0.
+     * Test when a null reference is passed to the delete() method. Expect the affected rows in the
+     * database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.delete(NULL_COMPUTER_REFERENCE);
+    int rowsAffected = computerDao.delete(NULL_COMPUTER_REFERENCE);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR);
     assertEquals(0, rowsAffected);
@@ -432,13 +433,13 @@ public class ComputerDaoTest {
   @Order(16)
   public void testDeleteInvalidId() {
     /**
-     * Test when the id of the computer to delete in the database is invalid.
-     * Expect the affected rows in the database to be 0.
+     * Test when the id of the computer to delete in the database is invalid. Expect the affected
+     * rows in the database to be 0.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.delete(COMPUTER_INVALID_ID);
+    int rowsAffected = computerDao.delete(COMPUTER_INVALID_ID);
     // Then
     assertErrorLogEvent(ComputerDaoErrors.INVALID_ID_ERROR);
     assertEquals(0, rowsAffected);
@@ -448,14 +449,14 @@ public class ComputerDaoTest {
   @Order(17)
   public void testDeleteSuccess() {
     /**
-     * Test when deleting a valid record of computer in the database.
-     * Expect the affected rows in the database to be 1.
+     * Test when deleting a valid record of computer in the database. Expect the affected rows in
+     * the database to be 1.
      */
     // Given
 
     // When
-    int rowsAffected = COMPUTER_DAO.delete(VALID_COMPUTER_TO_DELETE);
-    Optional<Computer> computerOpt = COMPUTER_DAO.get(VALID_COMPUTER_TO_DELETE_ID);
+    int rowsAffected = computerDao.delete(VALID_COMPUTER_TO_DELETE);
+    Optional<Computer> computerOpt = computerDao.get(VALID_COMPUTER_TO_DELETE_ID);
     // Then
     assertEquals(1, rowsAffected);
     assertFalse(computerOpt.isPresent());

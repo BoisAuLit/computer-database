@@ -11,12 +11,14 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.utils.TestUtils;
 
 public class CompanyDaoTest {
 
-  private static final CompanyDao COMPANY_DAO = CompanyDao.getInstance();
+  @Autowired
+  private CompanyDao companyDao;
 
   private static final Company VALID_COMPANY;
   static {
@@ -43,7 +45,7 @@ public class CompanyDaoTest {
     /* Get a company that exists in the database. */
     // Given
 
-    Optional<Company> companyOpt = COMPANY_DAO.get(1);
+    Optional<Company> companyOpt = companyDao.get(1);
     // Then
     assertTrue(companyOpt.isPresent());
     Company company = companyOpt.get();
@@ -56,7 +58,7 @@ public class CompanyDaoTest {
     // Given
 
     // When
-    Optional<Company> companyOpt = COMPANY_DAO.get(10);
+    Optional<Company> companyOpt = companyDao.get(10);
     // Then
     assertFalse(companyOpt.isPresent());
   }
@@ -67,23 +69,23 @@ public class CompanyDaoTest {
     // Given
 
     // When
-    List<Company> companies = COMPANY_DAO.getAll();
+    List<Company> companies = companyDao.getAll();
     // Then
     assertEquals(4, companies.size());
   }
 
   @Test
   public void testSave() {
-    assertThrows(UnsupportedOperationException.class, () -> COMPANY_DAO.update(null));
+    assertThrows(UnsupportedOperationException.class, () -> companyDao.update(null));
   }
 
   @Test
   public void testUpdate() {
-    assertThrows(UnsupportedOperationException.class, () -> COMPANY_DAO.update(null));
+    assertThrows(UnsupportedOperationException.class, () -> companyDao.update(null));
   }
 
   @Test
   public void testDelet() {
-    assertThrows(UnsupportedOperationException.class, () -> COMPANY_DAO.delete(null));
+    assertThrows(UnsupportedOperationException.class, () -> companyDao.delete(null));
   }
 }
