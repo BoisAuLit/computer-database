@@ -17,6 +17,8 @@ import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import com.excilys.cdb.dao.mappers.ComputerHandler;
 import com.excilys.cdb.dao.validators.ComputerValidator;
 import com.excilys.cdb.domain.Company;
@@ -25,6 +27,7 @@ import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.dto.ComputerPage;
 import com.excilys.cdb.dto.DtoManager;
 
+@Repository
 public class ComputerDao implements Dao<Computer> {
 
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
@@ -122,18 +125,13 @@ public class ComputerDao implements Dao<Computer> {
 
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
-  private ComputerDao() {
+  @Autowired
+  private DtoManager dtoManager;
+  @Autowired
+  private ComputerValidator computerValidator;
+  @Autowired
+  private ComputerHandler computerHandler;
 
-  }
-
-  private static class LazyHolder {
-    private static final ComputerDao INSTANCE = new ComputerDao();
-
-  }
-
-  public static ComputerDao getInstance() {
-    return LazyHolder.INSTANCE;
-  }
 
   private String getCountQuery(String nameToFind) {
     return COUNT_COMPUTERS_QUERY + " WHERE name like '%" + nameToFind + "%'";
@@ -149,7 +147,7 @@ public class ComputerDao implements Dao<Computer> {
 
       Map<String, Object> map = QUERY_RUNNER.query(connection, GET_QUERY, new MapHandler(), id);
       if (Objects.nonNull(map)) {
-        return Optional.of(ComputerHandler.convert(map));
+        return Optional.of(computerHandler.convert(map));
       }
 
       return Optional.empty();
@@ -185,12 +183,13 @@ public class ComputerDao implements Dao<Computer> {
           QUERY_RUNNER.query(connection, getPartialQuery(nameToFind), new MapListHandler(), limit,
               offset);
 
-      computers = ComputerHandler.convert(mapList);
+      computers = computerHandler.convert(mapList);
 
-      List<ComputerDto> computerDtos = DtoManager.getComputerDtoList(computers);
+      List<ComputerDto> computerDtos = dtoManager.getComputerDtoList(computers);
 
 
       int currentPage = offset / limit + 1;
+
 
       int totalPages;
       if (nbComputers % limit == 0) {
@@ -223,33 +222,19 @@ public class ComputerDao implements Dao<Computer> {
 
       List<Map<String, Object>> mapList =
           QUERY_RUNNER.query(connection, GET_ALL_QUERY, new MapListHandler());
-      computers = ComputerHandler.convert(mapList);
+      computers = computerHandler.convert(mapList);
 
       return computers;
     } catch (SQLException e) {
       logger.error(ComputerDaoErrors.GET_ALL_ERROR.getMessage(), e);
     }
     return computers;
-
-    // List<Computer> computers = new ArrayList<>();
-    //
-    // try (Connection connection = DataSource.getConnection()) {
-    //
-    // List<Map<String, Object>> mapList =
-    // QUERY_RUNNER.query(connection, GET_ALL_QUERY, new MapListHandler());
-    // computers = ComputerHandler.convert(mapList);
-    //
-    // return computers;
-    // } catch (SQLException e) {
-    // logger.error(ComputerDaoErrors.GET_ALL_ERROR.getMessage(), e);
-    // }
-    // return computers;
   }
 
   @Override
   public int save(Computer c) {
 
-    if (!ComputerValidator.checkSaveComputerValidity(c)) {
+    if (!computerValidator.checkSaveComputerValidity(c)) {
       return 0;
     }
 
@@ -270,7 +255,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int update(Computer c) {
 
-    if (!ComputerValidator.checkUpdateComputerValidity(c)) {
+    if (!computerValidator.checkUpdateComputerValidity(c)) {
       return 0;
     }
 
@@ -299,11 +284,6 @@ public class ComputerDao implements Dao<Computer> {
           introduced, discontinued,
           companyOpt.isPresent() ? companyOpt.get().getId() : null, c.getId());
 
-
-
-      // int rowsAffected = QUERY_RUNNER.update(connection, UPDATE_QUERY, c.getName(),
-      // c.getIntroduced().orElse(null), c.getDiscontinued().orElse(null),
-      // companyOpt.isPresent() ? companyOpt.get().getId() : null, c.getId());
       return rowsAffected;
     } catch (SQLException e) {
       logger.error(ComputerDaoErrors.UPDATE_ERROR.getMessage(), e);
@@ -314,7 +294,7 @@ public class ComputerDao implements Dao<Computer> {
   @Override
   public int delete(Computer c) {
 
-    if (!ComputerValidator.checkDeleteComputerValidity(c)) {
+    if (!computerValidator.checkDeleteComputerValidity(c)) {
       return 0;
     }
 

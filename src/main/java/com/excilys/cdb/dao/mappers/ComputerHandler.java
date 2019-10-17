@@ -7,15 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 
+@Component
 public final class ComputerHandler {
-  private static final CompanyDao COMPANY_DAO = CompanyDao.getInstance();
 
-  public static Computer convert(Map<String, Object> map) {
+  @Autowired
+  private CompanyDao companyDao;
+
+  public Computer convert(Map<String, Object> map) {
 
     Computer computer = new Computer();
 
@@ -41,7 +46,7 @@ public final class ComputerHandler {
     }
 
     if (Objects.nonNull(companyIdLong)) {
-      company = COMPANY_DAO.get(companyIdLong);
+      company = companyDao.get(companyIdLong);
     }
 
     computer.setId(idLong);
@@ -53,12 +58,12 @@ public final class ComputerHandler {
     return computer;
   }
 
-  public static List<Computer> convert(List<Map<String, Object>> mapList) {
+  public List<Computer> convert(List<Map<String, Object>> mapList) {
 
     List<Computer> computers = new ArrayList<>();
 
     for (Map<String, Object> map : mapList) {
-      Computer computer = ComputerHandler.convert(map);
+      Computer computer = convert(map);
       computers.add(computer);
     }
 

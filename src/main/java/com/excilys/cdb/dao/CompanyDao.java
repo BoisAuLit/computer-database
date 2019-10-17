@@ -10,8 +10,10 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import com.excilys.cdb.domain.Company;
 
+@Repository
 public class CompanyDao implements Dao<Company> {
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.CompanyDao");
 
@@ -27,18 +29,6 @@ public class CompanyDao implements Dao<Company> {
   private static final String ERROR_MESSAGE_PREFIX = "Error happpend when ";
   private static final String GET_ERROR = ERROR_MESSAGE_PREFIX + "getting compnay by id";
   private static final String GET_ALL_ERROR = ERROR_MESSAGE_PREFIX + "getting all companies";
-
-  private CompanyDao() {
-
-  }
-
-  private static class LazyHolder {
-    private static final CompanyDao INSTNACE = new CompanyDao();
-  }
-
-  public static CompanyDao getInstance() {
-    return LazyHolder.INSTNACE;
-  }
 
   @Override
   public Optional<Company> get(long id) {

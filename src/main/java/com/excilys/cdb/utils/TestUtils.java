@@ -29,13 +29,6 @@ public class TestUtils {
     }
   }
 
-  // public static void dropDatabase() throws SQLException {
-  // try (Connection connection = ConnectionUtils.getConnection();) {
-  // Statement statement = connection.createStatement();
-  // statement.execute("DROP ALL OBJECTS [DELETE FILES]");
-  // }
-  // }
-
   public static void clear() {
     System.clearProperty(TEST_PROP_NAME);
   }

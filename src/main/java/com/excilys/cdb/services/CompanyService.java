@@ -2,28 +2,21 @@ package com.excilys.cdb.services;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.excilys.cdb.dto.CompanyDto;
 import com.excilys.cdb.dto.DtoManager;
 
+@Service
 public class CompanyService {
-
-  private CompanyService() {
-
-  }
-
-  private static class LazyHolder {
-    private static final CompanyService INSTANCE = new CompanyService();
-  }
-
-  public static CompanyService getInstance() {
-    return LazyHolder.INSTANCE;
-  }
+  @Autowired
+  private DtoManager dtoManager;
 
   public Optional<CompanyDto> getCompanyDtoById(long id) {
-    return DtoManager.getCompanyDtoById(id);
+    return dtoManager.getCompanyDtoById(id);
   }
 
   public List<CompanyDto> getCompanyDtos() {
-    return DtoManager.getCompanyDtos();
+    return dtoManager.getCompanyDtos();
   }
 }

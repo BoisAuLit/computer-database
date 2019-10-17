@@ -6,17 +6,26 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.dao.ComputerDao.ComputerDaoErrors;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 
+@Component
 public class ComputerValidator {
 
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
 
-  private static boolean checkDatesValidity(Computer c) {
+  @Autowired
+  private ComputerDao computerDao;
+  @Autowired
+  private CompanyDao companyDao;
+
+
+  private boolean checkDatesValidity(Computer c) {
 
     Optional<LocalDate> introducedOpt = c.getIntroduced();
     Optional<LocalDate> discontinuedOpt = c.getDiscontinued();
@@ -33,12 +42,12 @@ public class ComputerValidator {
     return true;
   }
 
-  private static boolean checkIdValidity(Computer c) {
-    Optional<Computer> computerOpt = ComputerDao.getInstance().get(c.getId());
+  private boolean checkIdValidity(Computer c) {
+    Optional<Computer> computerOpt = computerDao.get(c.getId());
     return computerOpt.isPresent();
   }
 
-  private static boolean checkCompanyValidity(Computer c) {
+  private boolean checkCompanyValidity(Computer c) {
 
     Optional<Company> companyOpt = c.getCompany();
     if (!companyOpt.isPresent()) {
@@ -47,10 +56,10 @@ public class ComputerValidator {
 
     long companyId = companyOpt.get().getId();
 
-    return CompanyDao.getInstance().get(companyId).isPresent();
+    return companyDao.get(companyId).isPresent();
   }
 
-  public static boolean checkSaveComputerValidity(Computer c) {
+  public boolean checkSaveComputerValidity(Computer c) {
     if (!Objects.nonNull(c)) {
       logger.error(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR.getMessage());
       return false;
@@ -74,7 +83,7 @@ public class ComputerValidator {
     return true;
   }
 
-  public static boolean checkUpdateComputerValidity(Computer c) {
+  public boolean checkUpdateComputerValidity(Computer c) {
     if (!checkSaveComputerValidity(c)) {
       return false;
     }
@@ -87,7 +96,7 @@ public class ComputerValidator {
     return true;
   }
 
-  public static boolean checkDeleteComputerValidity(Computer c) {
+  public boolean checkDeleteComputerValidity(Computer c) {
 
     if (!Objects.nonNull(c)) {
       logger.error(ComputerDaoErrors.INVALID_COMPUTER_ARGUEMNT_ERROR.getMessage());

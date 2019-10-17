@@ -4,16 +4,21 @@ import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import com.excilys.cdb.dto.ComputerPage;
 import com.excilys.cdb.services.ComputerService;
 
+@Component
 @WebServlet("/dashboard")
-public class DashboardServlet extends HttpServlet {
+public class DashboardServlet extends AbstractServlet {
   private static final long serialVersionUID = 1L;
+
+  @Autowired
+  private ComputerService computerService;
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,7 +28,7 @@ public class DashboardServlet extends HttpServlet {
 
     // First call of this method
     if (StringUtils.isEmpty(limitStr)) {
-      computerPage = ComputerService.getInstance().getDefaultComputerPage();
+      computerPage = computerService.getDefaultComputerPage();
     } else {
       String nameToFind = request.getParameter("nameToFind");
       nameToFind = Objects.nonNull(nameToFind) ? nameToFind : "";
@@ -32,7 +37,7 @@ public class DashboardServlet extends HttpServlet {
 
       int limit = Integer.parseInt(limitStr);
       int offset = Integer.parseInt(offsetStr);
-      computerPage = ComputerService.getInstance().getComputerPage(nameToFind, limit, offset);
+      computerPage = computerService.getComputerPage(nameToFind, limit, offset);
     }
 
     request.setAttribute("page", computerPage);

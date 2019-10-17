@@ -6,18 +6,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
 
+
+@Component
 public class DtoManager {
 
   private static final long LONG_FIELD_ABSENT_SPECIFIER = -1L;
   private static final String STRING_FIELD_ABSENT_SPECIFIER = "";
 
+  @Autowired
+  private CompanyDao companyDao;
+  @Autowired
+  private ComputerDao computerDao;
+
   // Computer -> ComputerDto
-  private static ComputerDto getComputerDto(Computer c) {
+  private ComputerDto getComputerDto(Computer c) {
     ComputerDto cd = new ComputerDto();
     cd.setId(c.getId());
     cd.setName(c.getName());
@@ -48,7 +57,7 @@ public class DtoManager {
   }
 
   // List<Computer> -> List<ComputerDto>
-  public static List<ComputerDto> getComputerDtoList(List<Computer> computers) {
+  public List<ComputerDto> getComputerDtoList(List<Computer> computers) {
 
     List<ComputerDto> computerDtos = new ArrayList<>();
 
@@ -61,7 +70,7 @@ public class DtoManager {
   }
 
   // Company -> CompanyDto
-  private static CompanyDto getCompnayDto(Company c) {
+  private CompanyDto getCompnayDto(Company c) {
 
     CompanyDto cd = new CompanyDto();
 
@@ -72,7 +81,7 @@ public class DtoManager {
   }
 
   // List<Compnay> -> List<CompanyDto>
-  private static List<CompanyDto> getCompnayDtoList(List<Company> companies) {
+  private List<CompanyDto> getCompnayDtoList(List<Company> companies) {
 
     List<CompanyDto> companyDtos = new ArrayList<>();
 
@@ -84,9 +93,9 @@ public class DtoManager {
     return companyDtos;
   }
 
-  public static Optional<ComputerDto> getComputerDtoById(long id) {
+  public Optional<ComputerDto> getComputerDtoById(long id) {
 
-    Optional<Computer> computerOpt = ComputerDao.getInstance().get(id);
+    Optional<Computer> computerOpt = computerDao.get(id);
 
     if (!computerOpt.isPresent()) {
       return Optional.empty();
@@ -98,13 +107,13 @@ public class DtoManager {
 
   }
 
-  public static List<ComputerDto> getComputerDtos() {
-    List<Computer> computers = ComputerDao.getInstance().getAll();
+  public List<ComputerDto> getComputerDtos() {
+    List<Computer> computers = computerDao.getAll();
     return getComputerDtoList(computers);
   }
 
-  public static Optional<CompanyDto> getCompanyDtoById(long id) {
-    Optional<Company> companyOpt = CompanyDao.getInstance().get(id);
+  public Optional<CompanyDto> getCompanyDtoById(long id) {
+    Optional<Company> companyOpt = companyDao.get(id);
 
     if (!companyOpt.isPresent()) {
       return Optional.empty();
@@ -115,13 +124,13 @@ public class DtoManager {
     return Optional.of(companyDto);
   }
 
-  public static List<CompanyDto> getCompanyDtos() {
-    List<Company> companies = CompanyDao.getInstance().getAll();
+  public List<CompanyDto> getCompanyDtos() {
+    List<Company> companies = companyDao.getAll();
     return getCompnayDtoList(companies);
   }
 
   // ComputerDto -> Computer
-  public static Computer getComputer(ComputerDto computerDto) {
+  public Computer getComputer(ComputerDto computerDto) {
     Computer computer = new Computer();
 
     computer.setId(computerDto.getId());
