@@ -63,7 +63,7 @@ public class DataSource {
 
     try {
       Class.forName(MYSQL_DRIVER_NAME).newInstance();
-      Class.forName(H2_DRIVER_NAME).newInstance();
+      // Class.forName(H2_DRIVER_NAME).newInstance();
     } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
       logger.error("Error loading database driver!", e);
       System.exit(1);
@@ -83,12 +83,12 @@ public class DataSource {
     configMysql.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
     dsMysql = new HikariDataSource(configMysql);
 
-    // Configure H2 connection
-    configH2.setJdbcUrl(H2_CONNECTION_QUERY);
-    configH2.addDataSourceProperty("cachePrepStmts", "true");
-    configH2.addDataSourceProperty("prepStmtCacheSize", "250");
-    configH2.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-    dsH2 = new HikariDataSource(configH2);
+    // // Configure H2 connection
+    // configH2.setJdbcUrl(H2_CONNECTION_QUERY);
+    // configH2.addDataSourceProperty("cachePrepStmts", "true");
+    // configH2.addDataSourceProperty("prepStmtCacheSize", "250");
+    // configH2.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+    // dsH2 = new HikariDataSource(configH2);
   }
 
   private DataSource() {
@@ -96,10 +96,11 @@ public class DataSource {
   }
 
   public static Connection getConnection() throws SQLException {
-    if (Objects.nonNull(System.getProperty("test"))) {
-      return dsH2.getConnection();
-    } else {
-      return dsMysql.getConnection();
-    }
+    return dsMysql.getConnection();
+    // if (Objects.nonNull(System.getProperty("test"))) {
+    // return dsH2.getConnection();
+    // } else {
+    // return dsMysql.getConnection();
+    // }
   }
 }
