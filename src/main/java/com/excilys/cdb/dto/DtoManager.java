@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
@@ -21,8 +22,10 @@ public class DtoManager {
   private static final String STRING_FIELD_ABSENT_SPECIFIER = "";
 
   @Autowired
+  @Lazy
   private CompanyDao companyDao;
   @Autowired
+  @Lazy
   private ComputerDao computerDao;
 
   // Computer -> ComputerDto

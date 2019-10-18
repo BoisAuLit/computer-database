@@ -18,6 +18,7 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import com.excilys.cdb.dao.mappers.ComputerHandler;
 import com.excilys.cdb.dao.validators.ComputerValidator;
@@ -126,10 +127,13 @@ public class ComputerDao implements Dao<Computer> {
   private static final QueryRunner QUERY_RUNNER = new QueryRunner();
 
   @Autowired
+  @Lazy
   private DtoManager dtoManager;
   @Autowired
+  @Lazy
   private ComputerValidator computerValidator;
   @Autowired
+  @Lazy
   private ComputerHandler computerHandler;
 
 

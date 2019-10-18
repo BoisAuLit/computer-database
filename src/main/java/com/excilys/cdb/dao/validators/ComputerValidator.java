@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import com.excilys.cdb.dao.CompanyDao;
 import com.excilys.cdb.dao.ComputerDao;
@@ -20,8 +21,10 @@ public class ComputerValidator {
   private static Logger logger = LoggerFactory.getLogger("com.excilys.cdb.dao.ComputerDao");
 
   @Autowired
+  @Lazy
   private ComputerDao computerDao;
   @Autowired
+  @Lazy
   private CompanyDao companyDao;
 
 
