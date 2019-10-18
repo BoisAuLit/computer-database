@@ -19,4 +19,9 @@ public class HelloWorldServlet {
   public String showForm() {
     return "sample";
   }
+
+  @GetMapping("/cousin")
+  public String showCousin() {
+    return "dashboard";
+  }
 }
