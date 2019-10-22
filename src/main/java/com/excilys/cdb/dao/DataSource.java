@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.cdb.utils.ConfigurationUtils;
@@ -20,8 +19,8 @@ public class DataSource {
   private static HikariConfig configMysql = new HikariConfig();
   private static HikariDataSource dsMysql;
 
-  private static HikariConfig configH2 = new HikariConfig();
-  private static HikariDataSource dsH2;
+  // private static HikariConfig configH2 = new HikariConfig();
+  // private static HikariDataSource dsH2;
 
   private static Configuration configuration;
 
@@ -30,24 +29,24 @@ public class DataSource {
   private static final String DATABASE_TYPE_KEY = "dbType";
   private static final String MYSQL_DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
 
-  private static String connectionQuery;
+  // private static String connectionQuery;
 
 
-  private static final String H2_DRIVER_NAME = "org.h2.Driver";
+  // private static final String H2_DRIVER_NAME = "org.h2.Driver";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:~/test";
-  private static final String H2_CONNECTION_QUERY =
-      "jdbc:h2:file:./Database;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE";
+  // private static final String H2_CONNECTION_QUERY =
+  // "jdbc:h2:file:./Database;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:mem/test";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:tcp://localhost//data/test";
   // private static final String H2_CONNECTION_QUERY = "jdbc:h2:tcp://localhost/~/test";
 
-  private static final String CONNECTION_QUERY_TEMPLATE =
-      String.format("jdbc:${%s}://localhost:3306/"
-          + "computer-database-db?"
-          + "useUnicode=true"
-          + "&useJDBCCompliantTimezoneShift=true"
-          + "&useLegacyDatetimeCode=false"
-          + "&serverTimezone=UTC", DATABASE_TYPE_KEY);
+  // private static final String CONNECTION_QUERY_TEMPLATE =
+  // String.format("jdbc:${%s}://localhost:3306/"
+  // + "computer-database-db?"
+  // + "useUnicode=true"
+  // + "&useJDBCCompliantTimezoneShift=true"
+  // + "&useLegacyDatetimeCode=false"
+  // + "&serverTimezone=UTC", DATABASE_TYPE_KEY);
 
 
   static {
@@ -57,8 +56,8 @@ public class DataSource {
       Map<String, String> valuesMap = new HashMap<>();
       valuesMap.put(DATABASE_TYPE_KEY, configuration.getString(DATABASE_TYPE_KEY));
 
-      StringSubstitutor ss = new StringSubstitutor(valuesMap);
-      connectionQuery = ss.replace(CONNECTION_QUERY_TEMPLATE);
+      // StringSubstitutor ss = new StringSubstitutor(valuesMap);
+      // connectionQuery = ss.replace(CONNECTION_QUERY_TEMPLATE);
     }
 
     try {
