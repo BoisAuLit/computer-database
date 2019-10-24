@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,8 @@ import com.google.gson.reflect.TypeToken;
  * Servlet implementation class DeleteComputerServlet
  */
 @Component
-@WebServlet("/delete-computer")
+@Deprecated
+// @WebServlet("/delete-computer")
 public class DeleteComputerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,9 @@ public class DeleteComputerServlet extends HttpServlet {
       sb.append(line);
     }
 
-    Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+    Type listType = new TypeToken<ArrayList<String>>() {
+
+    }.getType();
     List<String> ids = gson.fromJson(sb.toString(), listType);
 
     boolean success = computerService.batchDeleteComputer(ids);

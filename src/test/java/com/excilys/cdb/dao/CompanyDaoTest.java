@@ -10,15 +10,25 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.context.WebApplicationContext;
+import com.excilys.cdb.configuration.SpringWebConfig;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.utils.TestUtils;
 
+@ExtendWith(SpringExtension.class)
+// @WebAppConfiguration
+@ContextConfiguration(classes = SpringWebConfig.class)
 public class CompanyDaoTest {
 
   @Autowired
   private CompanyDao companyDao;
+  // private CompanyDao companyDao = new CompanyDao();
 
   private static final Company VALID_COMPANY;
   static {
@@ -27,12 +37,22 @@ public class CompanyDaoTest {
     VALID_COMPANY.setName("Apple Inc.");
   }
 
+  @Autowired
+  private WebApplicationContext webApplicationContext;
+
+
+  @BeforeEach
+  public void setUp() {
+    this.companyDao = (CompanyDao) webApplicationContext.getBean("companyDao");
+  }
+
   /**
    * Initialize the database.
    */
   @BeforeAll
   public static void beforeAll() throws SQLException, IOException, ClassNotFoundException {
     TestUtils.setupDatabase();
+
   }
 
   @AfterAll

@@ -11,12 +11,12 @@ import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.dao.ComputerDao.ComputerDaoErrors;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
@@ -26,7 +26,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 
-@TestMethodOrder(OrderAnnotation.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDaoTest {
 
   /**
@@ -69,7 +69,7 @@ public class ComputerDaoTest {
   private static final Object[][] TEST_DATA;
 
   @Autowired
-  private ComputerDao computerDao;
+  private ComputerDao computerDao = new ComputerDao();
 
 
   private static Computer parseComputer(Object[] a) {

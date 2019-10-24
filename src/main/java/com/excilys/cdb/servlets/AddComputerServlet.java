@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +20,9 @@ import com.google.gson.Gson;
 /**
  * Servlet implementation class AddComputerServlet
  */
+@Deprecated
 @Component
-@WebServlet("/add-computer")
+// @WebServlet("/add-computer")
 public class AddComputerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class AddComputerServlet extends HttpServlet {
   private ComputerService computerService;
   @Autowired
   private CompanyService companyService;
- 
+
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);

@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -9,24 +9,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 
+<%-- <link href="<c:url value='/resources/css/bootstrap.min.css' />" rel="stylesheet" media="screen"> --%>
+<%-- <link href="<c:url value='/resources/css/main.css' />" rel="stylesheet" media="screen"> --%>
+<%-- <link href="<c:url value='/resources/css/font-awesome.css' />" rel="stylesheet" media="screen"> --%>
+<%-- <script src="<c:url value='/resources/js/sort-table.js' />" type="text/javascript"></script> --%>
 
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
-  rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet"
-  media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
-  rel="stylesheet" media="screen">
-  
-<script src="${pageContext.request.contextPath}/js/sort-table.js"
-  type="text/javascript"></script>
+
+<%-- <spring:url value="/css/bootstrap.min.css" var="cousin" /> --%>
+<%-- <spring:url value="/css/main.css" var="cousine" /> --%>
+<%-- <spring:url value="/css/font-awesome.css" var="coupon" /> --%>
+<%-- <spring:url value="/js/sort-table.js" var="coupure" /> --%>
+
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<script src="${pageContext.request.contextPath}/resources/js/sort-table.js" type="text/javascript"></script>
+
+
+
+<%-- <link href="<c:url value="/src/main/webapp/css/bootstrap.min.css" />" rel="stylesheet" media="screen"> --%>
+<%-- <link href="<c:url value="/css/main.css" />" rel="stylesheet" media="screen"> --%>
+<%-- <link href="<c:url value="/css/font-awesome.css" />" rel="stylesheet" media="screen"> --%>
+<%-- <script src="<c:url value="/js/sort-table.js" />" type="text/javascript"></script> --%>
+
 
 </head>
 
 <body>
   <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="dashboard"> Application - Computer
-        Database </a>
+      <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
     </div>
   </header>
 
@@ -37,22 +49,16 @@
         <div class="pull-left">
 
           <!--  -->
-          <form id="searchForm" action="search()" method="GET"
-            class="form-inline">
+          <form id="searchForm" action="search()" method="GET" class="form-inline">
 
-            <input type="search" id="searchbox" name="search"
-              class="form-control" placeholder="Search name"
-              value="${ nameToFind }" />
-            <input type="submit" id="searchsubmit" value="Filter by name"
-              class="btn btn-primary" />
+            <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ nameToFind }" />
+            <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
           </form>
 
         </div>
         <div class="pull-right">
-          <a class="btn btn-success" id="addComputer" href="add-computer">Add
-            Computer</a>
-          <a class="btn btn-default" id="editComputer" href="#"
-            onclick="$.fn.toggleEditMode();">Edit</a>
+          <a class="btn btn-success" id="addComputer" href="add-computer">Add Computer</a>
+          <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
         </div>
       </div>
     </div>
@@ -96,8 +102,7 @@
 
               <!-- Delete computer checkbox -->
               <td class="editMode">
-                <input type="checkbox" name="cb" class="cb"
-                  value="${ computer.id }">
+                <input type="checkbox" name="cb" class="cb" value="${ computer.id }">
               </td>
 
               <td>
@@ -121,8 +126,7 @@
 
         <c:if test="${ page.beginPage ne 1 }">
           <li>
-            <a
-              href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${(page.beginPage - 2) * page.currentMaxElementsPerPage}">
+            <a href="dashboard?limit=${ page.currentMaxElementsPerPage }&offset=${(page.beginPage - 2) * page.currentMaxElementsPerPage}">
               <span>&laquo;</span>
             </a>
           </li>
@@ -130,8 +134,7 @@
 
 
 
-        <c:forEach begin="${ page.beginPage }" end="${ page.endPage }"
-          varStatus="loop">
+        <c:forEach begin="${ page.beginPage }" end="${ page.endPage }" varStatus="loop">
 
           <c:if test="${ loop.index eq page.currentPage}">
             <li class="active">
@@ -176,8 +179,7 @@
           </c:if>
 
           <c:if test="${ page.currentMaxElementsPerPage ne  nbElements}">
-            <button type="button" class="btn btn-default"
-              onclick="changeSize('${nbElements}')">${ nbElements }</button>
+            <button type="button" class="btn btn-default" onclick="changeSize('${nbElements}')">${ nbElements }</button>
           </c:if>
 
         </c:forEach>
@@ -186,12 +188,33 @@
     </div>
   </footer>
 
-  <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-  <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
-  <script src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
-  <script src="${pageContext.request.contextPath}/js/dashboard_change_page.js"></script>
-  <script src="${pageContext.request.contextPath}/js/delete-computer.js"></script>
+  <%--   <spring:url value="/js/jquery.min.js" /> --%>
+  <%--   <spring:url value="/js/bootstrap.min.js" /> --%>
+  <%--   <spring:url value="/js/dashboard.js" /> --%>
+  <%--   <spring:url value="/js/validate_computer.js" /> --%>
+  <%--   <spring:url value="/js/dashboard_change_page.js" /> --%>
+  <%--   <spring:url value="/js/delete-computer.js" /> --%>
+
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/validate_computer.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/dashboard_change_page.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/delete-computer.js"></script>
+
+  <%--   <spring:url value="/js/jquery.min.js" var="val1" /> --%>
+  <%--   <spring:url value="/js/bootstrap.min.js" var="val2" /> --%>
+  <%--   <spring:url value="/js/dashboard.js" var="val3" /> --%>
+  <%--   <spring:url value="/js/validate_computer.js" var="val4" /> --%>
+  <%--   <spring:url value="/js/dashboard_change_page.js" var="val5" /> --%>
+  <%--   <spring:url value="/js/delete-computer.js" var="val6" /> --%>
+
+<%--   <script src="<c:url value='/resources/js/jquery.min.js' />"></script> --%>
+<%--   <script src="<c:url value='/resources/js/bootstrap.min.js' />"></script> --%>
+<%--   <script src="<c:url value='/resources/js/dashboard.js' />"></script> --%>
+<%--   <script src="<c:url value='/resources/js/validate_computer.js' />"></script> --%>
+<%--   <script src="<c:url value='/resources/js/dashboard_change_page.js' />"></script> --%>
+<%--   <script src="<c:url value='/resources/js/delete-computer.js' />"></script> --%>
 
 </body>
 </html>

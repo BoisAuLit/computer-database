@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,8 @@ import com.google.gson.Gson;
  * Servlet implementation class EditComputer
  */
 @Component
-@WebServlet("/edit-computer")
+@Deprecated
+// @WebServlet("/edit-computer")
 public class EditComputerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 

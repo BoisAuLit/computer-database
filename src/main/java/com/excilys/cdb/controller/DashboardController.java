@@ -1,24 +1,24 @@
 package com.excilys.cdb.controller;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import com.excilys.cdb.dto.ComputerPage;
 import com.excilys.cdb.services.ComputerService;
 
 @Controller
+@RequestMapping("dashboard")
 public class DashboardController {
 
   @Autowired
   private ComputerService computerService;
 
-  @GetMapping("/dashboard")
+  @GetMapping
   public ModelAndView getDashboard(
       @RequestParam(name = "limit", required = false) String limitStr,
       @RequestParam(required = false) String nameToFind,
@@ -44,18 +44,17 @@ public class DashboardController {
 
     modelAndView.addObject("page", computerPage);
 
-
     modelAndView.setViewName("dashboard");
     return modelAndView;
   }
 
-  @GetMapping("cousin")
-  public ModelAndView getCousin() {
-    ModelAndView modelAndView = new ModelAndView();
-    List<Integer> list = Arrays.asList(1, 2, 3);
-
-    modelAndView.addObject("list", list);
-    modelAndView.setViewName("cousin");
-    return modelAndView;
-  }
+  // @GetMapping("cousin")
+  // public ModelAndView getCousin() {
+  // ModelAndView modelAndView = new ModelAndView();
+  // List<Integer> list = Arrays.asList(1, 2, 3);
+  //
+  // modelAndView.addObject("list", list);
+  // modelAndView.setViewName("cousin");
+  // return modelAndView;
+  // }
 }

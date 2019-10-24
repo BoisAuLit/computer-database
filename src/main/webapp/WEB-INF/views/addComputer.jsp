@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
@@ -8,18 +7,14 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
-  rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/font-awesome.css"
-  rel="stylesheet" media="screen">
-<link href="${pageContext.request.contextPath}/css/main.css"
-  rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
   <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="dashboard"> Application -
-        Computer Database </a>
+      <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
     </div>
   </header>
 
@@ -28,40 +23,33 @@
       <div class="row">
         <div class="col-xs-8 col-xs-offset-2 box">
           <h1>Add Computer</h1>
-          <form action="add-computer" method="POST"
-            id="add-computer-form">
+          <form action="add-computer" method="POST" id="add-computer-form">
             <fieldset>
               <div class="form-group">
                 <label for="computerName">Computer name</label>
-                <input type="text" class="form-control"
-                  id="computerName" placeholder="Computer name">
+                <input type="text" class="form-control" id="computerName" placeholder="Computer name">
               </div>
               <div class="form-group">
                 <label for="introduced">Introduced date</label>
-                <input type="date" class="form-control" id="introduced"
-                  placeholder="Introduced date">
+                <input type="date" class="form-control" id="introduced" placeholder="Introduced date">
               </div>
               <div class="form-group">
                 <label for="discontinued">Discontinued date</label>
-                <input type="date" class="form-control"
-                  id="discontinued" placeholder="Discontinued date">
+                <input type="date" class="form-control" id="discontinued" placeholder="Discontinued date">
               </div>
 
               <!-- Companies' information -->
               <div class="form-group">
                 <label for="companyId">Company</label>
-                <select class="form-control" id="companyId"
-                  name="companyId">
+                <select class="form-control" id="companyId" name="companyId">
                   <option value="-1">Please select:</option>
                   <c:forEach var="companyDto" items="${ companyDtos }">
                     <option value="${companyDto.id}">
-                      <fmt:formatNumber type="number" pattern="00"
-                        value="${companyDto.id}" />
-                      &nbsp;&nbsp;&nbsp;&nbsp;${ companyDto.name }
+                      <fmt:formatNumber type="number" pattern="00" value="${companyDto.id}" /> &nbsp;&nbsp;&nbsp;&nbsp;${ companyDto.name }
                     </option>
                   </c:forEach>
                 </select>
-              </div> 
+              </div>
 
             </fieldset>
 
@@ -77,12 +65,10 @@
     </div>
   </section>
 
-  <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
-  <script
-    src="${pageContext.request.contextPath}/js/jquery.redirect.min.js"></script>
-  <script
-    src="${pageContext.request.contextPath}/js/validate_computer.js"></script>
-  <script src="${pageContext.request.contextPath}/js/add_computer.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/js/jquery.redirect.min.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/js/validate_computer.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/js/add_computer.js"></script>
 
 </body>
 </html>
