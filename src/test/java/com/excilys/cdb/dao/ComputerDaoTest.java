@@ -13,10 +13,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.excilys.cdb.dao.ComputerDao.ComputerDaoErrors;
 import com.excilys.cdb.domain.Company;
 import com.excilys.cdb.domain.Computer;
@@ -26,7 +24,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 public class ComputerDaoTest {
 
   /**
