@@ -47,14 +47,4 @@ public class DashboardController {
     modelAndView.setViewName("dashboard");
     return modelAndView;
   }
-
-  // @GetMapping("cousin")
-  // public ModelAndView getCousin() {
-  // ModelAndView modelAndView = new ModelAndView();
-  // List<Integer> list = Arrays.asList(1, 2, 3);
-  //
-  // modelAndView.addObject("list", list);
-  // modelAndView.setViewName("cousin");
-  // return modelAndView;
-  // }
 }

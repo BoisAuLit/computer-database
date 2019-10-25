@@ -26,11 +26,26 @@ $("#edit-computer-form").submit(event => {
 	 	companyId
 	}
 	
-	$.post("edit-computer", JSON.stringify(dataToPost)).done(data => {
-	  alert("Success", data)
-	  window.location.replace(`dashboard`)
-	}).fail(error => {
-	  alert("Failure", error)
-	  window.location.replace(`dashboard`)
+	$.ajax({
+	  url: "edit-computer",
+	  type: "POST",
+	  data: JSON.stringify(dataToPost),
+	  contentType:"application/json; charset=utf-8",
+	  success: () => {
+	    alert("Success")
+	    window.location.replace(`dashboard`)
+	  },
+	  error: () => {
+	    alert("Failure")
+	    window.location.replace(`dashboard`)
+	  }
 	})
+	
+//	$.post("edit-computer", JSON.stringify(dataToPost)).done(data => {
+//	  alert("Success", data)
+//	  window.location.replace(`dashboard`)
+//	}).fail(error => {
+//	  alert("Failure", error)
+//	  window.location.replace(`dashboard`)
+//	})
 });
