@@ -8,4 +8,6 @@ import com.excilys.cdb.model.CompanyModel;
 @Repository
 public interface CompanyRepository extends PagingAndSortingRepository<CompanyModel, Long> {
   Set<CompanyModel> findByName(String name);
-}
+
+@Override void delete(CompanyModel entity) {}dd
+d

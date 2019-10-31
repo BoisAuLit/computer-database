@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.excilys.cdb.model.CompanyModel;
-import com.excilys.cdb.persistence.CompanyRepository;
+import com.excilys.cdb.services.TestService;
 
 @Controller
 @RequestMapping("cousin")
@@ -18,14 +18,14 @@ public class CousinTest {
   // private CompanyService companyService;
 
   @Autowired
-  private CompanyRepository companyRepository;
+  private TestService testService;
 
   @GetMapping
   @ResponseBody
   public List<CompanyModel> getCousin() {
     // List<CompanyDto> companyDtos = companyService.getCompanyDtos();
 
-    Iterable<CompanyModel> it = companyRepository.findAll();
+    Iterable<CompanyModel> it = testService.getAll();
 
     List<CompanyModel> l = new ArrayList<>();
 
