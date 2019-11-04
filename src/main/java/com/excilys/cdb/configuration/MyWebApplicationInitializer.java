@@ -12,7 +12,7 @@ public class MyWebApplicationInitializer
 
   @Override
   protected Class<?>[] getServletConfigClasses() {
-    return new Class[] {SpringWebConfig.class};
+    return new Class[] {SpringWebConfig.class, DataConfig.class};
   }
 
   @Override
