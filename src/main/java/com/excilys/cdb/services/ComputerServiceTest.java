@@ -23,4 +23,19 @@ public class ComputerServiceTest {
   public Optional<ComputerModel> getComputerById(Long id) {
     return computerRepository.findById(id);
   }
+
+  @Transactional
+  public ComputerModel createComputer(ComputerModel computerModel) {
+    return computerRepository.save(computerModel);
+  }
+
+  @Transactional
+  public List<ComputerModel> findComputersByName(String name) {
+    return computerRepository.findByNameContainingIgnoreCase(name);
+  }
+
+  @Transactional
+  public ComputerModel updateComputer(ComputerModel computerModel) {
+    return computerRepository.save(computerModel);
+  }
 }

@@ -132,8 +132,6 @@
           </li>
         </c:if>
 
-
-
         <c:forEach begin="${ page.beginPage }" end="${ page.endPage }" varStatus="loop">
 
           <c:if test="${ loop.index eq page.currentPage}">
@@ -162,8 +160,6 @@
                 '${page.endPage * page.currentMaxElementsPerPage}')">
               <span>&raquo;</span>
             </a>
-
-
 
           </li>
         </c:if>
