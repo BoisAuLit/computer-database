@@ -7,12 +7,12 @@ public class MyWebApplicationInitializer
 
   @Override
   protected Class<?>[] getRootConfigClasses() {
-    return null;
+    return new Class[] {DataConfig.class, SpringSecurityConfig.class};
   }
 
   @Override
   protected Class<?>[] getServletConfigClasses() {
-    return new Class[] {SpringWebConfig.class, DataConfig.class};
+    return new Class[] {SpringWebConfig.class};
   }
 
   @Override
