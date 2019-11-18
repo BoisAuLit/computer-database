@@ -1,0 +1,5 @@
+com/excilys/cdb/configuration/SpringSecurityConfig.class
+com/excilys/cdb/configuration/SpringSecurityInitializer.class
+com/excilys/cdb/configuration/DataConfig.class
+com/excilys/cdb/configuration/SpringWebConfig.class
+com/excilys/cdb/configuration/MyWebApplicationInitializer.class

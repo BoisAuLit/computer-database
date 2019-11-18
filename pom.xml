@@ -1,159 +1,180 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.excilys</groupId>
-  <artifactId>computer-database</artifactId>
+  <artifactId>cdb-parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
 
-  <dependencies>
 
-    <!-- Database connection dependencies -->
+  <modules>
+    <module>build-tools</module>
+    <module>cdb-configuration</module>
+    <module>cdb-controller</module>
+    <module>cdb-model</module>
+    <module>cdb-repository</module>
+    <module>cdb-security</module>
+    <module>cdb-service</module>
+  </modules>
 
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>${mysql-connector-java.version}</version>
-    </dependency>
+  <dependencyManagement>
+    <dependencies>
 
-    <!-- Logging dependencies -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-core</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
+      <!-- Database connection dependencies -->
 
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${mysql-connector-java.version}</version>
+      </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j-api.version}</version>
-    </dependency>
+      <!-- Logging dependencies -->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
 
-    <!-- Testing dependencies -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${junit-jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
 
-    <!-- Servlet dependencies -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>${javax.servlet-api.version}</version>
-      <scope>provided</scope>
-    </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
 
-    <!-- Spring dependencies -->
+      <!-- Testing dependencies -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-jpa</artifactId>
-      <version>${spring-data-jpa.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+      <!-- Servlet dependencies -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${javax.servlet-api.version}</version>
+        <scope>provided</scope>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+      <!-- Spring dependencies -->
 
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-jpa</artifactId>
+        <version>${spring-data-jpa.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
 
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>${springframework.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
 
-    <!-- JPA Implementation (Hibernate) -->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate-core.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
 
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>${hibernate-entitymanager.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${springframework.version}</version>
+      </dependency>
 
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-dbcp2</artifactId>
-      <version>${commons-dbcp2.version}</version>
-    </dependency>
+      <!-- JPA Implementation (Hibernate) -->
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate-core.version}</version>
+      </dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson-databind.version}</version>
-    </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-entitymanager</artifactId>
+        <version>${hibernate-entitymanager.version}</version>
+      </dependency>
 
-  </dependencies>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-dbcp2</artifactId>
+        <version>${commons-dbcp2.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson-databind.version}</version>
+      </dependency>
+
+    </dependencies>
+
+  </dependencyManagement>
 
   <build>
     <plugins>
 
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${checkstyle-maven-plugin.version}</version>
-        <configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.excilys</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>1.0</version>
+          </dependency>
+        </dependencies>
+        <!-- <configuration>
           <configLocation>${resourceDir}/checkstyle.xml</configLocation>
-          <suppressionsLocation>${resourceDir}/suppressions.xml</suppressionsLocation>
+          <suppressionsLocation>${resourceDir}/checkstyle-suppressions.xml</suppressionsLocation>
         </configuration>
         <executions>
           <execution>
@@ -161,21 +182,38 @@
               <goal>check</goal>
             </goals>
           </execution>
-        </executions>
+        </executions> -->
       </plugin>
 
-       <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-enforcer-plugin</artifactId>
-            <version>1.4.1</version>
-            <configuration>
-                <rules><dependencyConvergence/></rules>
-            </configuration>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <configuration>
+          <rules>
+            <dependencyConvergence />
+          </rules>
+        </configuration>
+      </plugin>
 
 
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle-maven-plugin.version}</version>
+        <configuration>
+          <configLocation>whizbang/checkstyle.xml</configLocation>
+          <suppressionsLocation>whizbang/checkstyle-suppressions.xml</suppressionsLocation>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
 
   <properties>
     <!-- Database connection dependencies -->
@@ -184,25 +222,30 @@
     <!-- Logging dependencies -->
     <logback.version>1.2.3</logback.version>
     <slf4j-api.version>1.7.26</slf4j-api.version>
-    
+
     <!-- Testing dependencies -->
     <junit-jupiter.version>5.4.0</junit-jupiter.version>
-    
+
     <!-- Servlet dependencies -->
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
 
     <!-- Spring dependencies -->
     <spring-data-jpa.version>2.2.0.RELEASE</spring-data-jpa.version>
     <springframework.version>5.2.0.RELEASE</springframework.version>
-    
+
     <!-- JPA Implementation (Hibernate) -->
     <hibernate-core.version>5.4.7.Final</hibernate-core.version>
     <hibernate-entitymanager.version>5.4.7.Final</hibernate-entitymanager.version>
     <commons-dbcp2.version>2.2.0</commons-dbcp2.version>
     <jackson-databind.version>2.9.8</jackson-databind.version>
 
-    <resourceDir>src/main/resources</resourceDir>
+
+    <!-- Plugins & others -->
+    <!-- <resourceDir>src/main/resources</resourceDir> -->
     <checkstyle-maven-plugin.version>3.0.0</checkstyle-maven-plugin.version>
+    <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.target>1.8</maven.compiler.target>
