@@ -1,4 +1,4 @@
-package com.excilys.cdb.services;
+package com.excilys.cdb.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

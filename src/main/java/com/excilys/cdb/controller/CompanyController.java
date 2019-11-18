@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.services.CompanyService;
+import com.excilys.cdb.service.CompanyService;
 
 @RestController
 @RequestMapping("api/v1/companies")

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.services.ComputerService;
+import com.excilys.cdb.service.ComputerService;
 
 @RestController
 @RequestMapping("api/v1/computers")
