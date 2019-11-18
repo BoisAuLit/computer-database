@@ -5,17 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.excilys.cdb.model.CompanyModel;
-import com.excilys.cdb.services.CompanyServiceTest;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.services.CompanyService;
 
 @RestController
-@RequestMapping("api/v1/company")
+@RequestMapping("api/v1/companies")
 public class CompanyController {
   @Autowired
-  CompanyServiceTest companyServiceTest;
+  CompanyService companyService;
 
   @GetMapping("get-all")
-  public List<CompanyModel> getPersoneByName() {
-    return companyServiceTest.getAllCompanies();
+  public List<Company> getPersoneByName() {
+    return companyService.getAllCompanies();
   }
 }

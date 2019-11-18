@@ -8,38 +8,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.excilys.cdb.model.ComputerModel;
-import com.excilys.cdb.services.ComputerServiceTest;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.services.ComputerService;
 
 @RestController
-@RequestMapping("api/v1/computer")
+@RequestMapping("api/v1/computers")
 public class ComputerController {
 
   @Autowired
-  ComputerServiceTest computerServiceTest;
+  ComputerService computerService;
 
   @GetMapping("get-all")
-  public List<ComputerModel> getAllComputers() {
-    return computerServiceTest.getAllComputers();
+  public List<Computer> getAllComputers() {
+    return computerService.getAllComputers();
   }
 
   @GetMapping("get-by-id/{id}")
-  public ComputerModel getById(@PathVariable Long id) {
-    return computerServiceTest.getComputerById(id).get();
+  public Computer getById(@PathVariable Long id) {
+    return computerService.getComputerById(id).get();
   }
 
   @PostMapping("create")
-  public ComputerModel createComputer(@RequestBody ComputerModel computerModel) {
-    return computerServiceTest.createComputer(computerModel);
+  public Computer createComputer(@RequestBody Computer computer) {
+    return computerService.createComputer(computer);
   }
 
   @GetMapping("find-by-name/{name}")
-  public List<ComputerModel> findComputersByName(@PathVariable String name) {
-    return computerServiceTest.findComputersByName(name);
+  public List<Computer> findComputersByName(@PathVariable String name) {
+    return computerService.findComputersByName(name);
   }
 
   @PostMapping("update")
-  public ComputerModel updateComputer(@RequestBody ComputerModel computerModel) {
-    return computerServiceTest.updateComputer(computerModel);
+  public Computer updateComputer(@RequestBody Computer computer) {
+    return computerService.updateComputer(computer);
   }
 }
