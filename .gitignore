@@ -2,6 +2,6 @@
 /properties/
 .classpath
 .project
-/.settings/
+**/.settings/
 /.umlproject
 /src/bin/
