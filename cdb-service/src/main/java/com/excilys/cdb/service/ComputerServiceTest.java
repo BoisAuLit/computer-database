@@ -38,4 +38,9 @@ public class ComputerServiceTest {
   public ComputerModel updateComputer(ComputerModel computerModel) {
     return computerRepository.save(computerModel);
   }
+
+  @Transactional
+  public void deleteComputerById(Long id) {
+    computerRepository.deleteById(id);
+  }
 }

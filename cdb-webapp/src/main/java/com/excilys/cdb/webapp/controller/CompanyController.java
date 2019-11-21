@@ -2,6 +2,7 @@ package com.excilys.cdb.webapp.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ public class CompanyController {
   @Autowired
   CompanyServiceTest companyServiceTest;
 
+  @CrossOrigin(origins = "*", allowedHeaders = "*")
   @GetMapping("get-all")
   public List<CompanyModel> getPersoneByName() {
     return companyServiceTest.getAllCompanies();
