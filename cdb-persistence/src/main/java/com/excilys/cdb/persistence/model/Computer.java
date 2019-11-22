@@ -1,7 +1,6 @@
 package com.excilys.cdb.persistence.model;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,24 +11,18 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "computer")
-public class ComputerModel {
+public class Computer {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @Column(name = "name")
   private String name;
-
-  @Column(name = "introduced")
   private Timestamp introduced;
-
-  @Column(name = "discontinued")
   private Timestamp discontinued;
 
   @ManyToOne
   @JoinColumn(name = "company_id")
-  private CompanyModel companyModel;
+  private Company company;
 
   public Long getId() {
     return id;
@@ -63,13 +56,17 @@ public class ComputerModel {
     this.discontinued = discontinued;
   }
 
-  public CompanyModel getCompanyModel() {
-    return companyModel;
+  public Company getCompany() {
+    return company;
   }
 
-  public void setCompanyModel(CompanyModel companyModel) {
-    this.companyModel = companyModel;
+  public void setCompany(Company company) {
+    this.company = company;
   }
 
-
+  @Override
+  public String toString() {
+    return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced
+        + ", discontinued=" + discontinued + ", company=" + company + "]";
+  }
 }

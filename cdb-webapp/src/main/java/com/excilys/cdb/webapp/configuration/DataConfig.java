@@ -43,7 +43,8 @@ public class DataConfig {
   DataSource dataSource() {
     DriverManagerDataSource ds = new DriverManagerDataSource();
 
-    ds.setUrl("jdbc:mysql://localhost:3306/computer-database-db");
+    ds.setUrl(
+        "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull");
     ds.setUsername("admincdb");
     ds.setPassword("qwerty1234");
     ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
